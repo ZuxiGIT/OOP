@@ -18,7 +18,7 @@ Vector::Vector(const Vector& obj)
 	startY = obj.startY;
 }
 
-Vector Vector::operator*(int num)
+Vector Vector::operator*(double num)
 {
 	return Vector(X*num, Y*num, Z*num, startX, startY);
 }
@@ -28,7 +28,7 @@ Vector Vector::operator*(const Vector& obj)
 	return Vector(X*obj.X, Y*obj.Y, Z*obj.Z);
 }
 
-Vector Vector::operator/(int num)
+Vector Vector::operator/(double num)
 {
 	return Vector(X/num, Y/num, Z/num, startX, startY);
 }
@@ -40,7 +40,7 @@ double Vector::operator^(const Vector& obj)
 
 Vector Vector::operator+(const Vector& obj)
 {
-	if (startX == obj.startX && startY == startY)
+	if (startX == obj.startX && startY == obj.startY)
 		return Vector(X + obj.X, Y + obj.Y, Z + obj.Z, startX, startY);
 	else return *this;
 }
@@ -57,7 +57,7 @@ Vector Vector::operator-()
 
 bool Vector::operator==(const Vector& obj)
 {
-	return ((X == obj.X) && (X == obj.Y) && (Z == obj.Z));
+	return ((X == obj.X) && (Y == obj.Y) && (Z == obj.Z));
 }
 
 void Vector::setSize(double x, double y, double z)
@@ -80,11 +80,7 @@ void Vector::startfrom(double x, double y)
 
 Vector Vector::normalize()
 {
-	double len = length();
-	X /= len;
-	Y /= len;
-	Z /= len;
-	return Vector(X, Y, Z);
+	return (*this)/length();
 }
 
 double Vector::length()

@@ -2,12 +2,12 @@
 #define Sphere_hpp
 #include "Vector.hpp"
 #include "Color.hpp"
+#include <math.h>
 
 class Sphere : public sf::Drawable
 {
 
 	Vector Position;
-	Vector Camera;
 	Vector SizeOfWind;
 	int Radius;
 
@@ -18,8 +18,9 @@ class Sphere : public sf::Drawable
 		Color ourSphere;
 		Color Light;
 		Color Ambient; 
-		
 		Vector LightPosition;
+		
+
 		Sphere(Vector	pos,
 			   Color 	sphere,
 			   Color 	light,

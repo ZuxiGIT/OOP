@@ -6,8 +6,8 @@
 
 class Vector : public sf::Drawable
 {
-	double startX, startY;
 	public:
+		double startX, startY;
 		double X, Y, Z;
 		Vector(double x = 0,
 			   double y = 0,
@@ -16,9 +16,9 @@ class Vector : public sf::Drawable
 			   double startY = 0);
 		Vector(const Vector&);
 
-		Vector 	operator*  	(int num);
+		Vector 	operator*  	(double num);
 		Vector 	operator*	(const Vector&);
-		Vector 	operator/  	(int num);
+		Vector 	operator/  	(double num);
 		double 	operator^  	(const Vector&);
 		Vector 	operator+  	(const Vector&);
 		Vector 	operator-  	(const Vector&);
