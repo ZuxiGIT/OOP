@@ -1,1 +1,1 @@
-g++ $1 Vector.cpp sphere.cpp Color.cpp -lsfml-system -lsfml-audio -lsfml-window -lsfml-graphics
+g++ $1 Vector.cpp sphere.cpp Color.cpp -lsfml-system -lsfml-audio -lsfml-window -lsfml-graphics -Wall

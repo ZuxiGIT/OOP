@@ -13,13 +13,17 @@ class Sphere : public sf::Drawable
 
 	Vector toScreen(int x, int y) const;
 	Vector toScreen(Vector point) const;
+
+	Vector FongReflection(Vector point, Vector light_reflection) const;
+	Vector LambertReflection(Vector point, Vector light_reflection, Vector col_of_sph) const;
+	Vector AmbientReflection(Vector ambient_reflection, Vector col_of_sph) const;
 	public:
 
 		Color ourSphere;
 		Color Light;
 		Color Ambient; 
 		Vector LightPosition;
-		
+		Vector Camera;		
 
 		Sphere(Vector	pos,
 			   Color 	sphere,

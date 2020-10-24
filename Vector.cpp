@@ -80,7 +80,7 @@ void Vector::startfrom(double x, double y)
 
 Vector Vector::normalize()
 {
-	return (*this)/length();
+	return Vector((*this)/length());
 }
 
 double Vector::length()
