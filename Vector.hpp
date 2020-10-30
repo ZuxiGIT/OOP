@@ -21,6 +21,7 @@ class Vector : public sf::Drawable
 		Vector 	operator/  	(double num);
 		double 	operator^  	(const Vector&);
 		Vector 	operator+  	(const Vector&);
+		//Vector 	operator+= 	(const Vector&);
 		Vector 	operator-  	(const Vector&);
 		Vector 	operator-  	();
 		bool   	operator== 	(const Vector&);

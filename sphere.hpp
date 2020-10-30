@@ -2,6 +2,7 @@
 #define Sphere_hpp
 #include "Vector.hpp"
 #include "Color.hpp"
+#include "Light.hpp"
 #include <math.h>
 
 class Sphere : public sf::Drawable
@@ -10,27 +11,28 @@ class Sphere : public sf::Drawable
 	Vector Position;
 	Vector SizeOfWind;
 	int Radius;
+	int num_of_lights;
+	std::vector<Light*> lights;
 
 	Vector toScreen(int x, int y) const;
 	Vector toScreen(Vector point) const;
 
-	Vector FongReflection(Vector point, Vector light_reflection) const;
-	Vector LambertReflection(Vector point, Vector light_reflection, Vector col_of_sph) const;
+	Vector PhongReflection	(Vector point, Vector ambient_reflection, Vector col_of_sph) const;
+	Vector LambertReflection(Vector point, Vector ambient_reflection, Vector col_of_sph) const; 
 	Vector AmbientReflection(Vector ambient_reflection, Vector col_of_sph) const;
 	public:
 
 		Color ourSphere;
-		Color Light;
+		
 		Color Ambient; 
-		Vector LightPosition;
 		Vector Camera;		
 
 		Sphere(Vector	pos,
 			   Color 	sphere,
-			   Color 	light,
-			   Color 	ambient,
 			   int   	radius,
+			   Color 	light,
 			   Vector	light_position,
+			   Color 	ambient,
 			   Vector 	szOfwind);
 
 

@@ -1,38 +1,47 @@
 #include "sphere.hpp"
 
 
-Vector Sphere::FongReflection(Vector point, Vector light_reflection) const
+Vector Sphere::PhongReflection(Vector point, Vector ambient_reflection, Vector col_of_sph) const
 {
-	Vector temp 			= LightPosition;
-	temp 					= (temp - point);
-	
-	if((point.normalize() ^ temp.normalize()) <= 0) return 0; 
+	Vector Result;
+	for (std::size_t i = 0; i < lights.size(); i++)
+	{
+		Vector temp             = lights[i]->position;
+		temp                    = (temp - point);
 
-	Vector flare_aim 		= (temp * (point.normalize() ^ temp.normalize()) * 2 - temp);
-	
-	temp 					= Camera;
-	temp 					= (temp - point);
-	
-	double flare_angle_cos 	= temp.normalize() ^ flare_aim.normalize();;
-
-	//if(flare_angle_cos > 0) printf("flare_angle_cos: %lf\n", flare_angle_cos);
-
-	double flare_coeff 		= flare_angle_cos  > 0 ? pow(flare_angle_cos, 40) : 0;
+		point.Z += sin(10000 * point.Z + 1e8) * 10;
 		
-	//if (flare_coeff > 0.98) {printf("flare_coeff: %lf\n", flare_coeff);
-	//						 printf("flare_angle_cos: %lf\n", flare_angle_cos);}
+		//if ((point.normalize() ^ temp.normalize()) < -1e-3) return LambertReflection(point, light_reflection, ambient_reflection, col_of_sph);
+		Vector flare_aim        = ( point.normalize() * (point.normalize() ^ temp.normalize()) * 2 - temp.normalize());
+		
+		temp                    = Camera;
+		temp                    = (temp - point);
+		
+		double flare_angle_cos  = temp.normalize() ^ flare_aim;//,normalize();
+
+		double flare_coeff 		= flare_angle_cos > 0 ? pow(flare_angle_cos, 30) : 0;
 	
-	return light_reflection * flare_coeff * 255;
+		Result = Result + lights[i]->Normalized_color * flare_coeff * 255;
+	}
+	return Result + LambertReflection(point, ambient_reflection, col_of_sph);
 }
 
-Vector Sphere::LambertReflection(Vector point, Vector light_reflection, Vector col_of_sph) const 
+Vector Sphere::LambertReflection(Vector point, Vector ambient_reflection, Vector col_of_sph) const 
 {
-	Vector temp 		= LightPosition;
+	Vector Result;
+	for (std::size_t i = 0; i < lights.size(); i++)
+	{
+		Vector temp         = lights[i]->position;
+		
+		point.Z += sin(1e4 * point.Z + 1e8) * 10;
+
+		double angle_cos    = (point.normalize()) ^ ((temp - point).normalize());
+		double light_coeff  = angle_cos > 0 ? angle_cos : 0;
+
+		Result = Result + lights[i]->Normalized_color * light_coeff * col_of_sph;
+	}
 	
-	double angle_cos 	= (point.normalize()) ^ ((temp - point).normalize());
-	double light_coeff 	= angle_cos > 0 ? angle_cos : 0;
-	
-	return light_reflection * light_coeff * col_of_sph;
+	return Result + AmbientReflection(ambient_reflection, col_of_sph);
 }
 
 Vector Sphere::AmbientReflection(Vector ambient_reflection, Vector col_of_sph) const
@@ -40,16 +49,19 @@ Vector Sphere::AmbientReflection(Vector ambient_reflection, Vector col_of_sph) c
 	return ambient_reflection * col_of_sph;
 }
 
-Sphere::Sphere(Vector pos, Color sphere, Color light, Color ambient, int radius, Vector light_position, Vector szOfwnd)
+Sphere::Sphere(Vector pos, Color sphere, int radius, Color light, Vector light_position, Color ambient, Vector szOfwnd)
+
+
 {
 	Position 		= pos;
 	ourSphere 		= sphere;
 	Ambient 		= ambient;
 	Radius 			= radius;
-	Light 			= light;
-	LightPosition 	= light_position;
 	SizeOfWind 		= szOfwnd; 
 	Camera 			= Vector(0, 0, 400);
+
+	Light temp 		= {light_position, light};
+	lights.push_back(&temp);
 }
 
 Vector Sphere::toScreen(int x, int y) const
@@ -58,7 +70,7 @@ Vector Sphere::toScreen(int x, int y) const
 	double temp_y 	= y - (int)SizeOfWind.Y / 2;
 	double temp_z	= Radius * Radius - temp_x * temp_x - temp_y * temp_y; 
 	
-	if (temp_z < 0)
+	if (temp_z <= 0)
 		temp_z = 0;
 	else
 		temp_z = sqrt(temp_z);
@@ -85,7 +97,6 @@ void Sphere::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 	Vector point;
 
-	Vector light_reflection 	= Vector(Light.R  , Light.G  , Light.B  ) / 255 * Light.Alpha   / 255.;
 	Vector ambient_reflection 	= Vector(Ambient.R, Ambient.G, Ambient.B) / 255 * Ambient.Alpha / 255.;
 
 	Vector tmp_col;
@@ -98,9 +109,7 @@ void Sphere::draw(sf::RenderTarget& target, sf::RenderStates states) const
 			point = toScreen(x, y);
 			if (point.X * point.X + point.Y * point.Y < Radius * Radius)
 			{				
-				tmp_col = LambertReflection(point, light_reflection, col_of_sp) +\
-						  AmbientReflection(ambient_reflection, col_of_sp) +\
-						  FongReflection   (point, light_reflection);
+				tmp_col = PhongReflection (point, ambient_reflection, col_of_sp);
 
 				
 				tmp_col.X = tmp_col.X > 255 ? 255 : tmp_col.X;

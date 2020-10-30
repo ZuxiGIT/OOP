@@ -45,6 +45,7 @@ Vector Vector::operator+(const Vector& obj)
 	else return *this;
 }
 
+
 Vector Vector::operator-(const Vector& obj)
 {
 	return Vector(X - obj.X, Y - obj.Y, Z - obj.Z, startX, startY);
