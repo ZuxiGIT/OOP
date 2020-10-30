@@ -50,8 +50,6 @@ Vector Sphere::AmbientReflection(Vector ambient_reflection, Vector col_of_sph) c
 }
 
 Sphere::Sphere(Vector pos, Color sphere, int radius, Color light, Vector light_position, Color ambient, Vector szOfwnd)
-
-
 {
 	Position 		= pos;
 	ourSphere 		= sphere;
@@ -60,7 +58,7 @@ Sphere::Sphere(Vector pos, Color sphere, int radius, Color light, Vector light_p
 	SizeOfWind 		= szOfwnd; 
 	Camera 			= Vector(0, 0, 400);
 
-	Light temp 		= {light_position, light};
+	Light temp (light_position, light);
 	lights.push_back(&temp);
 }
 
