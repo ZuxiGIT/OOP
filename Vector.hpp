@@ -16,6 +16,7 @@ class Vector : public sf::Drawable
 			   double startY = 0);
 		Vector(const Vector&);
 
+		Vector 	operator*	();
 		Vector 	operator*  	(double num);
 		Vector 	operator*	(const Vector&);
 		Vector 	operator/  	(double num);

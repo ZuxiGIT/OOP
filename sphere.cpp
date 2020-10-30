@@ -4,14 +4,17 @@
 Vector Sphere::PhongReflection(Vector point, Vector ambient_reflection, Vector col_of_sph) const
 {
 	Vector Result;
-	for (std::size_t i = 0; i < lights.size(); i++)
+	Vector norm_col;
+	size_t size = lights.size();
+
+	for (std::size_t i = 0; i < size; i++)
 	{
-		Vector temp             = lights[i]->position;
+		Vector temp             = lights[i].position;
 		temp                    = (temp - point);
 
 		point.Z += sin(10000 * point.Z + 1e8) * 10;
 		
-		//if ((point.normalize() ^ temp.normalize()) < -1e-3) return LambertReflection(point, light_reflection, ambient_reflection, col_of_sph);
+		if ((point.normalize() ^ temp.normalize()) < -1e-3) continue;
 		Vector flare_aim        = ( point.normalize() * (point.normalize() ^ temp.normalize()) * 2 - temp.normalize());
 		
 		temp                    = Camera;
@@ -20,8 +23,9 @@ Vector Sphere::PhongReflection(Vector point, Vector ambient_reflection, Vector c
 		double flare_angle_cos  = temp.normalize() ^ flare_aim;//,normalize();
 
 		double flare_coeff 		= flare_angle_cos > 0 ? pow(flare_angle_cos, 30) : 0;
-	
-		Result = Result + lights[i]->Normalized_color * flare_coeff * 255;
+		
+		norm_col = lights[i].Normalized_color;
+		Result = Result + norm_col * flare_coeff * 255;
 	}
 	return Result + LambertReflection(point, ambient_reflection, col_of_sph);
 }
@@ -29,16 +33,20 @@ Vector Sphere::PhongReflection(Vector point, Vector ambient_reflection, Vector c
 Vector Sphere::LambertReflection(Vector point, Vector ambient_reflection, Vector col_of_sph) const 
 {
 	Vector Result;
-	for (std::size_t i = 0; i < lights.size(); i++)
+	Vector norm_col;
+	size_t size = lights.size();
+
+	for (std::size_t i = 0; i < size; i++)
 	{
-		Vector temp         = lights[i]->position;
+		Vector temp         = lights[i].position;
 		
 		point.Z += sin(1e4 * point.Z + 1e8) * 10;
 
 		double angle_cos    = (point.normalize()) ^ ((temp - point).normalize());
 		double light_coeff  = angle_cos > 0 ? angle_cos : 0;
 
-		Result = Result + lights[i]->Normalized_color * light_coeff * col_of_sph;
+		norm_col = lights[i].Normalized_color;
+		Result = Result + norm_col * light_coeff * col_of_sph;
 	}
 	
 	return Result + AmbientReflection(ambient_reflection, col_of_sph);
@@ -58,8 +66,7 @@ Sphere::Sphere(Vector pos, Color sphere, int radius, Color light, Vector light_p
 	SizeOfWind 		= szOfwnd; 
 	Camera 			= Vector(0, 0, 400);
 
-	Light temp (light_position, light);
-	lights.push_back(&temp);
+	lights.push_back(Light(light_position, light));
 }
 
 Vector Sphere::toScreen(int x, int y) const
@@ -109,6 +116,7 @@ void Sphere::draw(sf::RenderTarget& target, sf::RenderStates states) const
 			{				
 				tmp_col = PhongReflection (point, ambient_reflection, col_of_sp);
 
+				//printf("tmp_col: %lf %lf %lf\n", tmp_col.X, tmp_col.Y, tmp_col.Z);
 				
 				tmp_col.X = tmp_col.X > 255 ? 255 : tmp_col.X;
 				tmp_col.Y = tmp_col.Y > 255 ? 255 : tmp_col.Y;

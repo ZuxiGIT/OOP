@@ -119,7 +119,8 @@ void Vector::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	Vector line = *this;
 	line.normalize();
 	line.startfrom(*this);
-	line = line*(-20);
+	Vector temp = line*(-20); 
+	line = temp;
 	
 	Vector fst_arrow = this->normalVector();
 	fst_arrow.normalize();

@@ -12,7 +12,6 @@ class Sphere : public sf::Drawable
 	Vector SizeOfWind;
 	int Radius;
 	int num_of_lights;
-	std::vector<Light*> lights;
 
 	Vector toScreen(int x, int y) const;
 	Vector toScreen(Vector point) const;
@@ -24,6 +23,7 @@ class Sphere : public sf::Drawable
 
 		Color ourSphere;
 		
+		std::vector<Light> lights;
 		Color Ambient; 
 		Vector Camera;		
 
