@@ -12,9 +12,13 @@ Vector Sphere::PhongReflection(Vector point, Vector ambient_reflection, Vector c
 		Vector temp             = lights[i].position;
 		temp                    = (temp - point);
 
+		//point.X += sin(10000 * point.X + 1e8) * 10;
+		//point.Y += cos(10 * point.Z) * 500;
 		point.Z += sin(10000 * point.Z + 1e8) * 10;
 		
+
 		if ((point.normalize() ^ temp.normalize()) < -1e-3) continue;
+		
 		Vector flare_aim        = ( point.normalize() * (point.normalize() ^ temp.normalize()) * 2 - temp.normalize());
 		
 		temp                    = Camera;
@@ -22,7 +26,7 @@ Vector Sphere::PhongReflection(Vector point, Vector ambient_reflection, Vector c
 		
 		double flare_angle_cos  = temp.normalize() ^ flare_aim;//,normalize();
 
-		double flare_coeff 		= flare_angle_cos > 0 ? pow(flare_angle_cos, 30) : 0;
+		double flare_coeff 		= flare_angle_cos > 0 ? pow(flare_angle_cos, 10) : 0;
 		
 		norm_col = lights[i].Normalized_color;
 		Result = Result + norm_col * flare_coeff * 255;
@@ -40,7 +44,7 @@ Vector Sphere::LambertReflection(Vector point, Vector ambient_reflection, Vector
 	{
 		Vector temp         = lights[i].position;
 		
-		point.Z += sin(1e4 * point.Z + 1e8) * 10;
+		//point.Z += sin(1e4 * point.Z + 1e8) * 10;
 
 		double angle_cos    = (point.normalize()) ^ ((temp - point).normalize());
 		double light_coeff  = angle_cos > 0 ? angle_cos : 0;
