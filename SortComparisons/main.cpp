@@ -18,8 +18,13 @@ int main()
         while (window.pollEvent(event))
         {
             // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed     || 
+                (event.type == sf::Event::KeyPressed &&
+                event.key.code == sf::Keyboard::Escape))
                 window.close();
+            if (event.type == sf::Event::MouseButtonPressed &&
+                event.mouseButton.button == sf::Mouse::Left)
+                but.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
         }
 
         // clear the window with black color

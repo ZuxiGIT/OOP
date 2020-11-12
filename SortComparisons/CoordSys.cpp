@@ -1,9 +1,10 @@
 #include "CoordSys.hpp"
 
-CoordSys::CoordSys(Vector sz, Vector pos)
+CoordSys::CoordSys(Vector sz, Vector pos, size_t st)
 {
 	position   = pos;
 	size       = sz;
+    step = st;
 }
 
 
@@ -24,6 +25,22 @@ void CoordSys::draw(sf::RenderTarget& target, sf::RenderStates states) const
     Vector Yaxe (0, -size.Y);
     Yaxe.startfrom(position.X, position.Y + size.Y);
     target.draw(Yaxe);
-  
+
+    //grid
+    Vector tmp (size.X, 0);
+    for ( size_t i = 1; i <= step; i ++)
+    {
+        tmp.startfrom(position.X, position.Y + (step * size.Y - size.Y * i) / step);
+        tmp.drawline(target, states, sf::Color::Blue);
+    }
+    
+    tmp.X = 0;
+    tmp.Y = size.Y;
+    for ( size_t i = 1; i <= step; i ++)
+    {
+        tmp.startfrom(position.X  + (step * size.X - size.X * i) / step, position.Y);
+        tmp.drawline(target, states, sf::Color::Blue);
+    }
+    
 }
 

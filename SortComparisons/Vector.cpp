@@ -81,7 +81,10 @@ void Vector::startfrom(double x, double y)
 
 Vector Vector::normalize()
 {
-	return Vector((*this)/length());
+	double len = length();
+	if (len == 0)
+		return *this; 
+	return Vector((*this)/len);
 }
 
 double Vector::length()
@@ -108,8 +111,8 @@ void Vector::drawline(sf::RenderTarget& target, sf::RenderStates states, sf::Col
 {
 	sf::Vertex line[] = 
 	{
-		sf::Vertex(sf::Vector2f(startX, startY), color),
-		sf::Vertex(sf::Vector2f(startX + X, startY + Y), color)
+		sf::Vertex(sf::Vector2f(startX, 	startY), 		color),
+		sf::Vertex(sf::Vector2f(startX + X, startY + Y),	color)
 	};
 	target.draw(line, 2, sf::Lines);
 }
@@ -117,21 +120,20 @@ void Vector::drawline(sf::RenderTarget& target, sf::RenderStates states, sf::Col
 void Vector::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	Vector line = *this;
-	line.normalize();
-	line.startfrom(*this);
-	Vector temp = line*(-20); 
-	line = temp;
-	
-	Vector fst_arrow = this->normalVector();
-	fst_arrow.normalize();
+	line 		= line.normalize();
+	line.startfrom(*this); 
+	line 		= line *(-20);
+
+	Vector fst_arrow 	= this->normalVector();
+	fst_arrow 			= fst_arrow.normalize();
 	fst_arrow.startfrom(*this);
-	fst_arrow = fst_arrow * 5;
+	fst_arrow 			= fst_arrow * 5;
 	
-	Vector snd_arrow = -fst_arrow;
-	fst_arrow = fst_arrow + line;
-	snd_arrow = snd_arrow + line;
+	Vector snd_arrow 	= -fst_arrow;
+	fst_arrow 			= fst_arrow + line;
+	snd_arrow 			= snd_arrow + line;
 	
-	snd_arrow.drawline(target, states, sf::Color::Red);
-	fst_arrow.drawline(target, states, sf::Color::Red);
-	drawline(target, states);
+	snd_arrow.drawline	(target, states, sf::Color::Red);
+	fst_arrow.drawline	(target, states, sf::Color::Red);
+	drawline			(target, states, sf::Color::Black);
 }

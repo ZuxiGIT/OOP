@@ -1,9 +1,12 @@
 #include "Button.hpp"
 
-Button::Button(Vector sz, Vector pos, sf::Color backgr_color, const char* txt, fp func_pointer)
+Button::Button(Vector sz, Vector pos, sf::Color backgr_color, sf::Color txt_color, const char* txt, fp func_pointer)
 {
 	size = sz;
 	position = pos;
+
+	background_color	= backgr_color;
+	text_color			= txt_color; 
 	
 	Body = sf::RectangleShape(sf::Vector2f(sz.X, sz.Y));
 	Body.setPosition(pos.X, pos.Y);
@@ -16,7 +19,7 @@ Button::Button(Vector sz, Vector pos, sf::Color backgr_color, const char* txt, f
 
 	text = sf::Text(txt, font);
 	text.setCharacterSize(30);
-	text.setFillColor(sf::Color::Black);
+	text.setFillColor(text_color);
 
 	int offset = (size.Y - text.getCharacterSize()) / 2;
 	offset = offset > 0 ? offset : 0;
@@ -30,6 +33,21 @@ Button::Button(Vector sz, Vector pos, sf::Color backgr_color, const char* txt, f
 	Scale(text);
 
 	function = func_pointer;
+}
+
+void Button::clicked(Vector mouse_pos)
+{
+	if ((mouse_pos.X > position.X) && (mouse_pos.X < (position.X + size.X)) && 
+		(mouse_pos.Y > position.Y) && (mouse_pos.Y < (position.Y + size. Y)))
+	{
+		state = !state;
+		text_color			= sf::Color(255,255,255) - text_color;// + sf::Color(0,0,1);
+		background_color	= sf::Color::White - background_color;
+
+
+		text.setFillColor(text_color);
+		Body.setFillColor(background_color);
+	}
 }
 
 void Button::Scale(sf::Text)

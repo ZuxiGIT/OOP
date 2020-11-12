@@ -10,6 +10,7 @@ class Button : public sf::Drawable
 {
 	Vector size, position;
 	sf::RectangleShape Body;
+	sf::Color background_color, text_color;
 	sf::Text text;
 	sf::Font font;
 
@@ -17,9 +18,10 @@ class Button : public sf::Drawable
 	fp function;
 	public:
 
-		Button(	Vector sz, Vector pos, sf::Color backgr_color = sf::Color::White, const char* txt = "Some text",
+		Button(	Vector sz, Vector pos, sf::Color backgr_color = sf::Color::Red, sf::Color txt_color = sf::Color::Cyan, const char* txt = "Some text",
 				fp func_pointer = NULL);
 
+		void clicked(Vector mouse_pos);
 		void Scale	(sf::Text text);
 		void draw 	(sf::RenderTarget& target, sf::RenderStates states) const override;
 
