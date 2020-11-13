@@ -18,7 +18,7 @@ class Button : public sf::Drawable
 	fp function;
 	public:
 
-		Button(	Vector sz, Vector pos, sf::Color backgr_color = sf::Color::Red, sf::Color txt_color = sf::Color::Cyan, const char* txt = "Some text",
+		Button(	Vector sz, Vector pos, sf::Color backgr_color = sf::Color::White, sf::Color txt_color = sf::Color::Black, const char* txt = "Some text",
 				fp func_pointer = NULL);
 
 		void clicked(Vector mouse_pos);

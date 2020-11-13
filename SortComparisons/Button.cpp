@@ -8,11 +8,7 @@ Button::Button(Vector sz, Vector pos, sf::Color backgr_color, sf::Color txt_colo
 	background_color	= backgr_color;
 	text_color			= txt_color; 
 	
-	Body = sf::RectangleShape(sf::Vector2f(sz.X, sz.Y));
-	Body.setPosition(pos.X, pos.Y);
-	Body.setFillColor(backgr_color);
-	Body.setOutlineThickness(2);
-	Body.setOutlineColor(sf::Color::Red);
+
 
 	font = sf::Font();
 	font.loadFromFile("UbuntuMono-R.ttf");
@@ -41,8 +37,8 @@ void Button::clicked(Vector mouse_pos)
 		(mouse_pos.Y > position.Y) && (mouse_pos.Y < (position.Y + size. Y)))
 	{
 		state = !state;
-		text_color			= sf::Color(255,255,255) - text_color;// + sf::Color(0,0,1);
-		background_color	= sf::Color::White - background_color;
+		text_color			= sf::Color(255 -text_color.r,			255 - text_color.g , 		255 - text_color.b);
+		background_color	= sf::Color(255 - background_color.r,	255 - background_color.g, 	255 - background_color.b);
 
 
 		text.setFillColor(text_color);
@@ -78,6 +74,13 @@ void Button::Scale(sf::Text)
 
 void Button::draw (sf::RenderTarget& target, sf::RenderStates states) const
 {
+	
+	sf::RectangleShape Body(sf::Vector2f(size.X, size.Y));
+	Body.setPosition(position.X, position.Y);
+	Body.setFillColor(background_color);
+	Body.setOutlineThickness(2);
+	Body.setOutlineColor(sf::Color::Red);
+
 	target.draw(Body);
 	target.draw(text);
 }

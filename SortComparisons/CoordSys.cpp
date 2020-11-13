@@ -41,6 +41,4 @@ void CoordSys::draw(sf::RenderTarget& target, sf::RenderStates states) const
         tmp.startfrom(position.X  + (step * size.X - size.X * i) / step, position.Y);
         tmp.drawline(target, states, sf::Color::Blue);
     }
-    
 }
-

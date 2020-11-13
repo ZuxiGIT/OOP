@@ -25,6 +25,9 @@ int main()
             if (event.type == sf::Event::MouseButtonPressed &&
                 event.mouseButton.button == sf::Mouse::Left)
                 but.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
+            if (event.type == sf::Event::MouseButtonReleased &&
+                event.mouseButton.button == sf::Mouse::Left)
+                but.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
         }
 
         // clear the window with black color
