@@ -1,4 +1,5 @@
 #include "Button.hpp"
+#include <math.h>
 
 Button::Button(Vector sz, Vector pos, sf::Color backgr_color, sf::Color txt_color, const char* txt, fp func_pointer)
 {
@@ -8,25 +9,23 @@ Button::Button(Vector sz, Vector pos, sf::Color backgr_color, sf::Color txt_colo
 	background_color	= backgr_color;
 	text_color			= txt_color; 
 	
-
-
 	font = sf::Font();
 	font.loadFromFile("UbuntuMono-R.ttf");
 
 	text = sf::Text(txt, font);
-	text.setCharacterSize(30);
+	text.setCharacterSize(20);
 	text.setFillColor(text_color);
 
 	int offset = (size.Y - text.getCharacterSize()) / 2;
 	offset = offset > 0 ? offset : 0;
 
-	printf("Offset is %d\n", offset);
+	printf("For rectangleButton Offset is %d\n", offset);
 	fflush(NULL);
 
 	text.setPosition(pos.X, pos.Y + offset);
 	text.setStyle(sf::Text::Bold);// | sf::Text::Underlined);
 
-	Scale(text);
+	//Scale(text);
 
 	function = func_pointer;
 }
@@ -37,12 +36,11 @@ void Button::clicked(Vector mouse_pos)
 		(mouse_pos.Y > position.Y) && (mouse_pos.Y < (position.Y + size. Y)))
 	{
 		state = !state;
-		text_color			= sf::Color(255 -text_color.r,			255 - text_color.g , 		255 - text_color.b);
+		text_color			= sf::Color(255 - text_color.r,			255 - text_color.g , 		255 - text_color.b);
 		background_color	= sf::Color(255 - background_color.r,	255 - background_color.g, 	255 - background_color.b);
 
 
 		text.setFillColor(text_color);
-		Body.setFillColor(background_color);
 	}
 }
 
@@ -84,3 +82,51 @@ void Button::draw (sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(Body);
 	target.draw(text);
 }
+
+EllipseButton::EllipseButton(	Vector pos, int a, int b, sf::Color backgr_color,
+								sf::Color txt_color, const char* txt,
+								fp func_pointer) 
+:	
+	Button(Vector(a, b), Vector(pos.X, pos.Y), backgr_color, txt_color, txt, func_pointer), 
+	radius_a(a), 
+	radius_b(b)
+{
+	int offset = (size.Y - text.getCharacterSize()) / 2;
+	offset = offset > 0 ? offset : 0;
+
+	printf("For rectangleButton Offset is %d\n", offset);
+	fflush(NULL);
+	text.setPosition(pos.X - a / 2, pos.Y - b / 2 + offset);
+}
+
+
+void EllipseButton::draw (sf::RenderTarget& target, sf::RenderStates states) const
+{
+
+	sf::ConvexShape ellipse;
+	ellipse.setPosition(position.X, position.Y);
+	ellipse.setFillColor(background_color);
+	ellipse.setOutlineThickness(2);
+	ellipse.setOutlineColor(sf::Color::Red);
+	ellipse.setPointCount(quality);
+
+	for(int i = 0; i < quality; i++)
+	{
+	    float rad 	= (360 / quality * i) / ( 360 / M_PI / 2);
+	    float x 	= cos(rad) * radius_a;
+	    float y 	= sin(rad) * radius_b;
+
+	    ellipse.setPoint(i, sf::Vector2f(x,y));
+	}
+	target.draw(ellipse);
+	target.draw(text);
+}
+
+CircleButton::CircleButton(	Vector pos, int r, sf::Color backgr_color,
+							sf::Color txt_color, const char* txt,
+							fp func_pointer)
+:
+EllipseButton(pos, r, r, backgr_color, txt_color, txt, func_pointer),
+radius(r)
+{}
+

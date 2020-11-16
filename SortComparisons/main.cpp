@@ -8,7 +8,8 @@ int main()
     // run the program as long as the window is open
     
     Button but (Vector(150,40), Vector(10,10));
-    CoordSys cs (Vector(200, 200), Vector(100, 100));
+    EllipseButton ellbut(Vector(600,100), 50, 40);
+    CoordSys cs (Vector(100, 100), Vector(100, 100));
 
 
     while (window.isOpen())
@@ -35,8 +36,9 @@ int main()
 
         // draw everything here...
         // window.draw(...);
-        window.draw(but);
-        window.draw(cs);
+        //window.draw(but);
+        window.draw(ellbut);
+        //window.draw(cs);
         // end the current frame
         window.display();
     }
