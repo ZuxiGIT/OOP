@@ -15,17 +15,9 @@ Button::Button(Vector sz, Vector pos, sf::Color backgr_color, sf::Color txt_colo
 	text = sf::Text(txt, font);
 	text.setCharacterSize(20);
 	text.setFillColor(text_color);
-
-	int offset = (size.Y - text.getCharacterSize()) / 2;
-	offset = offset > 0 ? offset : 0;
-
-	printf("For rectangleButton Offset is %d\n", offset);
-	fflush(NULL);
-
-	text.setPosition(pos.X, pos.Y + offset);
 	text.setStyle(sf::Text::Bold);// | sf::Text::Underlined);
 
-	//Scale(text);
+	ScaleText();
 
 	function = func_pointer;
 }
@@ -44,7 +36,7 @@ void Button::clicked(Vector mouse_pos)
 	}
 }
 
-void Button::Scale(sf::Text)
+void Button::ScaleText()
 {
 	unsigned int glyph_height 	= text.getCharacterSize();
 	unsigned int glyph_width 	= text.getCharacterSize() / 2;
@@ -54,18 +46,28 @@ void Button::Scale(sf::Text)
 	
 	while(*str++)	num_of_glyphs++; 
 	
-	printf("height is %u and width is %u and num of glyphs : %zu\n", glyph_height, glyph_width, num_of_glyphs);
+	printf("Button: height is %u and width is %u and num of glyphs : %zu\n", glyph_height, glyph_width, num_of_glyphs);
 	fflush(NULL);
 	
-	double Xscale 				= (size.X - 10)	/ (num_of_glyphs * glyph_width);
+	double Xscale 				= (size.X - 4)	/ (num_of_glyphs * glyph_width);
 	double Yscale 				= (size.Y )		/ (glyph_height);
 	
-	Yscale = Yscale > 1 ? 1 : Yscale;
 	Xscale = Xscale > 1 ? 1 : Xscale; 
+	Yscale = Yscale > 1 ? 1 : Yscale;
 
-	printf("Xscale is %lf and Yscale is %lf\n", Xscale, Yscale);
+	printf("Button: Xscale is %lf and Yscale is %lf\n", Xscale, Yscale);
 	fflush(NULL);
-	
+
+	int Xoffset = (size.X - num_of_glyphs * glyph_width) / 2;
+	int Yoffset = (size.Y - glyph_height) / 2;
+
+	Xoffset = Xoffset > 0 ? Xoffset : 0;
+	Yoffset = Yoffset > 0 ? Yoffset : 0;
+
+	printf("For rectangleButton Offset is (%d; %d)\n", Xoffset, Yoffset);
+	fflush(NULL);
+
+	text.setPosition(position.X + Xoffset, position.Y + Yoffset);
 	text.setScale(Xscale, Yscale);
 }
 
@@ -83,20 +85,17 @@ void Button::draw (sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(text);
 }
 
+
+//------------------------------------ELLIPSE-------------------------------------------
 EllipseButton::EllipseButton(	Vector pos, int a, int b, sf::Color backgr_color,
 								sf::Color txt_color, const char* txt,
 								fp func_pointer) 
 :	
-	Button(Vector(a, b), Vector(pos.X, pos.Y), backgr_color, txt_color, txt, func_pointer), 
+	Button(Vector(2*a, 2*b), Vector(pos.X, pos.Y), backgr_color, txt_color, txt, func_pointer),
 	radius_a(a), 
 	radius_b(b)
 {
-	int offset = (size.Y - text.getCharacterSize()) / 2;
-	offset = offset > 0 ? offset : 0;
-
-	printf("For rectangleButton Offset is %d\n", offset);
-	fflush(NULL);
-	text.setPosition(pos.X - a / 2, pos.Y - b / 2 + offset);
+	ScaleText();
 }
 
 
@@ -122,6 +121,71 @@ void EllipseButton::draw (sf::RenderTarget& target, sf::RenderStates states) con
 	target.draw(text);
 }
 
+void EllipseButton::ScaleText()
+{
+	unsigned int glyph_height 	= text.getCharacterSize();
+	unsigned int glyph_width 	= text.getCharacterSize() / 2;
+
+	const char* str 			= text.getString().toAnsiString().c_str();
+	size_t num_of_glyphs 		= 0;
+	
+	while(*str++)	num_of_glyphs++; 
+	
+	printf("EllipseButton: height is %u and width is %u and num of glyphs : %zu\n", glyph_height, glyph_width, num_of_glyphs);
+	fflush(NULL);
+
+	double y = text.getCharacterSize() / 2;
+	double x = sqrt(1 -  y * y / radius_b / radius_b ) * radius_a;
+
+	double right_height = 2 * y;
+	double right_width 	= 2 * x;
+
+	printf("EllipseButton: RIGHT SIZE IS (width %lf; height %lf)\n", right_width, right_height);
+
+	double Xscale =  (right_width - 4) 	/ (num_of_glyphs * glyph_width);
+	double Yscale =	 right_height 			/ (glyph_height);
+
+	Xscale = Xscale > 1 ? 1 : Xscale; 
+	Yscale = Yscale > 1 ? 1 : Yscale;
+
+
+	printf("EllipseButton: Xscale is %lf and Yscale is %lf\n", Xscale, Yscale);
+	fflush(NULL);
+	
+	int Xoffset = (size.X - num_of_glyphs * glyph_width) / 2;
+	int Yoffset = (size.Y - glyph_height) / 2;
+
+	Xoffset = Xoffset > 0 ? Xoffset : 0;
+	Yoffset = Yoffset > 0 ? Yoffset : 0;
+
+	printf("For EllipseButton Offset is (%d; %d)\n", Xoffset, Yoffset);
+	fflush(NULL);
+
+	text.setPosition(position.X  - radius_a + Xoffset, position.Y - radius_b + Yoffset);
+	text.setScale(Xscale, Yscale);
+}
+
+void EllipseButton::clicked(Vector mouse_pos)
+{	
+	int X = mouse_pos.X - position.X;
+	int Y = mouse_pos.Y - position.Y;
+	int a = radius_a;
+	int b = radius_b;
+
+	if (X * X / (a * a) + Y * Y / (b * b) <= 1)
+	{
+		state = !state;
+		text_color			= sf::Color(255 - text_color.r,			255 - text_color.g , 		255 - text_color.b);
+		background_color	= sf::Color(255 - background_color.r,	255 - background_color.g, 	255 - background_color.b);
+
+
+		text.setFillColor(text_color);
+	}
+}
+
+
+
+//-------------------------------CIRCLE---------------------------------------
 CircleButton::CircleButton(	Vector pos, int r, sf::Color backgr_color,
 							sf::Color txt_color, const char* txt,
 							fp func_pointer)
@@ -130,3 +194,13 @@ EllipseButton(pos, r, r, backgr_color, txt_color, txt, func_pointer),
 radius(r)
 {}
 
+//-----------------------------ButtonHandler-----------------------------------
+ButtonHandler::ButtonHandler(Button but[], size_t size)
+:	buttons(but), count(size)
+{}
+
+void ButtonHandler::draw (sf::RenderTarget& target, sf::RenderStates states) const
+{
+	for (size_t i = 0; i < count; i ++)
+		buttons[i].draw(target, states);  
+}

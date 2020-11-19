@@ -7,9 +7,14 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 800), "My window");
     // run the program as long as the window is open
     
-    Button but (Vector(150,40), Vector(10,10));
-    EllipseButton ellbut(Vector(600,100), 50, 40);
-    CoordSys cs (Vector(100, 100), Vector(100, 100));
+
+    Button buttons[] = {
+        Button         (Vector(150,40), Vector(10,10)),
+        EllipseButton  (Vector(600,100), 30, 40)
+    };
+
+    ButtonHandler bthndl(buttons, sizeof(buttons)/sizeof(buttons[0]));
+    //CoordSys cs (Vector(100, 100), Vector(100, 100));
 
 
     while (window.isOpen())
@@ -23,12 +28,20 @@ int main()
                 (event.type == sf::Event::KeyPressed &&
                 event.key.code == sf::Keyboard::Escape))
                 window.close();
+            /*
             if (event.type == sf::Event::MouseButtonPressed &&
                 event.mouseButton.button == sf::Mouse::Left)
-                but.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
+                {
+                    but.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
+                    ellbut.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
+                }
             if (event.type == sf::Event::MouseButtonReleased &&
                 event.mouseButton.button == sf::Mouse::Left)
-                but.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
+                {
+                    but.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
+                    ellbut.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
+                }
+                */
         }
 
         // clear the window with black color
@@ -36,8 +49,7 @@ int main()
 
         // draw everything here...
         // window.draw(...);
-        //window.draw(but);
-        window.draw(ellbut);
+        window.draw(bthndl);
         //window.draw(cs);
         // end the current frame
         window.display();
