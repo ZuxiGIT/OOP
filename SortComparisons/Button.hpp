@@ -1,16 +1,17 @@
 #ifndef Button_hpp
 #define	Button_hpp
 #include "Vector.hpp"
+#include "Color.hpp"
 
 
 typedef void (*fp)();
 
 
-class Button : public sf::Drawable
+class Button
 {
 	protected:
 		Vector size, position;
-		sf::Color background_color, text_color;
+		Color background_color, text_color;
 		sf::Text text;
 		sf::Font font;
 
@@ -24,7 +25,7 @@ class Button : public sf::Drawable
 
 		virtual void clicked	(Vector mouse_pos);
 		virtual void ScaleText	();
-		virtual void draw 		(sf::RenderTarget& target, sf::RenderStates states) const;
+		virtual void draw 		(sf::RenderTarget& target);
 
 };
 
@@ -39,9 +40,9 @@ class EllipseButton : public Button
 									sf::Color txt_color = sf::Color::Black, const char* txt = "Some text",
 									fp func_pointer 	= NULL);
 
-		virtual void clicked	(Vector mouse_pos) override;
-		virtual void ScaleText	()				   override; 
-		virtual void draw 		(sf::RenderTarget& target, sf::RenderStates states) const;
+		virtual void clicked	(Vector mouse_pos) 			override;
+		virtual void ScaleText	()				   			override; 
+		virtual void draw 		(sf::RenderTarget& target) 	override;
 
 };
 class CircleButton : public EllipseButton
@@ -55,14 +56,18 @@ class CircleButton : public EllipseButton
 
 
 
-class ButtonHandler : public sf::Drawable
+
+class ButtonHandler
 {
-	Button* buttons;
-	size_t count;
+	static const int NUMBER_OF_BUTTONS = 30;
+	Button* buttons[NUMBER_OF_BUTTONS] = {};
+	size_t count = 0;
 
 	public:
-		ButtonHandler		(Button but [], size_t size);
+		ButtonHandler	();
 
-		virtual void draw 	(sf::RenderTarget& target, sf::RenderStates states) const override;
+		void draw 		(sf::RenderTarget& target);
+		void add 		(Button* but);
+		void clicked	(Vector mouse_pos);
 };
 #endif /* Button_hpp */

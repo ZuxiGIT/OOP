@@ -4,7 +4,7 @@
 #include <math.h>
 //#include "Line.hpp"
 
-class Vector : public sf::Drawable
+class Vector
 {
 	public:
 		double startX, startY;
@@ -33,13 +33,11 @@ class Vector : public sf::Drawable
 		Vector 	normalize	();
 		double 	length		();
 		Vector 	normalVector() const;
-		void   	drawline	(const Vector&, const Vector&, sf::RenderTarget& target,
-							 sf::RenderStates states) const;
+		void   	drawline	(const Vector&, const Vector&, sf::RenderTarget& target) const;
 
-		void 	drawline	(sf::RenderTarget& target, sf::RenderStates states, 
-							 sf::Color Color = sf::Color::White) const;
+		void 	drawline	(sf::RenderTarget& target, sf::Color Color = sf::Color::White) const;
 
-		void   	draw 		(sf::RenderTarget& target, sf::RenderStates states) const override;
+		void   	draw 		(sf::RenderTarget& target) const;
 };
 
 #endif /* Vector_hpp */

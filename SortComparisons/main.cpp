@@ -3,55 +3,50 @@
 
 int main()
 {
-    // create the window
     sf::RenderWindow window(sf::VideoMode(800, 800), "My window");
-    // run the program as long as the window is open
     
 
-    Button buttons[] = {
-        Button         (Vector(150,40), Vector(10,10)),
-        EllipseButton  (Vector(600,100), 30, 40)
-    };
+    Button         but      (Vector(150,40) , Vector(10,10) , sf::Color::White, sf::Color::Black, "Sin");
+    EllipseButton  ellbut   (Vector(600,100), 30, 40        , sf::Color::White, sf::Color::Black, "Cos");
+    CircleButton   crclbut  (Vector(600,600), 30            , sf::Color::White, sf::Color::Black, "Tan");       
 
-    ButtonHandler bthndl(buttons, sizeof(buttons)/sizeof(buttons[0]));
-    //CoordSys cs (Vector(100, 100), Vector(100, 100));
+    CoordSys cs (Vector(100, 100), Vector(100, 100));
+
+    ButtonHandler bthndl;
+
+    bthndl.add(&but);
+    bthndl.add(&ellbut);
+    bthndl.add(&crclbut);
+
 
 
     while (window.isOpen())
     {   
-        // check all the window's events that were triggered since the last iteration of the loop
+
         sf::Event event;
         while (window.pollEvent(event))
         {
-            // "close requested" event: we close the window
             if (event.type == sf::Event::Closed     || 
-                (event.type == sf::Event::KeyPressed &&
+               (event.type == sf::Event::KeyPressed &&
                 event.key.code == sf::Keyboard::Escape))
                 window.close();
-            /*
+            
             if (event.type == sf::Event::MouseButtonPressed &&
                 event.mouseButton.button == sf::Mouse::Left)
-                {
-                    but.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
-                    ellbut.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
-                }
+                bthndl.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
             if (event.type == sf::Event::MouseButtonReleased &&
                 event.mouseButton.button == sf::Mouse::Left)
-                {
-                    but.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
-                    ellbut.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
-                }
-                */
+                bthndl.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
+
+                
         }
 
-        // clear the window with black color
         window.clear(sf::Color::Black);
 
-        // draw everything here...
-        // window.draw(...);
-        window.draw(bthndl);
-        //window.draw(cs);
-        // end the current frame
+
+        bthndl.draw(window);
+        cs.draw(window);
+
         window.display();
     }
 

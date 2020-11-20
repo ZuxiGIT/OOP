@@ -97,7 +97,7 @@ Vector Vector::normalVector() const
 	return Vector(-Y, X);
 }
 
-void Vector::drawline(const Vector& start, const Vector& finish, sf::RenderTarget& target, sf::RenderStates states) const
+void Vector::drawline(const Vector& start, const Vector& finish, sf::RenderTarget& target) const
 {
 	sf::Vertex line[] = 
 	{
@@ -107,7 +107,7 @@ void Vector::drawline(const Vector& start, const Vector& finish, sf::RenderTarge
 	target.draw(line, 2, sf::Lines);	
 }
 
-void Vector::drawline(sf::RenderTarget& target, sf::RenderStates states, sf::Color color) const
+void Vector::drawline(sf::RenderTarget& target, sf::Color color) const
 {
 	sf::Vertex line[] = 
 	{
@@ -117,12 +117,12 @@ void Vector::drawline(sf::RenderTarget& target, sf::RenderStates states, sf::Col
 	target.draw(line, 2, sf::Lines);
 }
 
-void Vector::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Vector::draw(sf::RenderTarget& target) const
 {
 	Vector line = *this;
 	line 		= line.normalize();
 	line.startfrom(*this); 
-	line 		= line *(-20);
+	line 		= line * (-20);
 
 	Vector fst_arrow 	= this->normalVector();
 	fst_arrow 			= fst_arrow.normalize();
@@ -133,7 +133,7 @@ void Vector::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	fst_arrow 			= fst_arrow + line;
 	snd_arrow 			= snd_arrow + line;
 	
-	snd_arrow.drawline	(target, states, sf::Color::Red);
-	fst_arrow.drawline	(target, states, sf::Color::Red);
-	drawline			(target, states, sf::Color::Black);
+	snd_arrow.drawline	(target, sf::Color::Red);
+	fst_arrow.drawline	(target, sf::Color::Red);
+	drawline			(target, sf::Color::Black);
 }

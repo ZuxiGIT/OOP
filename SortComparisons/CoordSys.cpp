@@ -8,7 +8,7 @@ CoordSys::CoordSys(Vector sz, Vector pos, size_t st)
 }
 
 
-void CoordSys::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void CoordSys::draw(sf::RenderTarget& target) const
 {
     //border
     sf::RectangleShape border(sf::Vector2f(size.X, size.Y));
@@ -20,18 +20,18 @@ void CoordSys::draw(sf::RenderTarget& target, sf::RenderStates states) const
     //axes
     Vector Xaxe (size.X, 0);
     Xaxe.startfrom(position.X, position.Y + size.Y);
-    target.draw(Xaxe);
+    Xaxe.draw(target);
 
     Vector Yaxe (0, -size.Y);
     Yaxe.startfrom(position.X, position.Y + size.Y);
-    target.draw(Yaxe);
+    Yaxe.draw(target);
 
     //grid
     Vector tmp (size.X, 0);
     for ( size_t i = 1; i <= step; i ++)
     {
         tmp.startfrom(position.X, position.Y + (step * size.Y - size.Y * i) / step);
-        tmp.drawline(target, states, sf::Color::Blue);
+        tmp.drawline(target, sf::Color::Blue);
     }
     
     tmp.X = 0;
@@ -39,6 +39,6 @@ void CoordSys::draw(sf::RenderTarget& target, sf::RenderStates states) const
     for ( size_t i = 1; i <= step; i ++)
     {
         tmp.startfrom(position.X  + (step * size.X - size.X * i) / step, position.Y);
-        tmp.drawline(target, states, sf::Color::Blue);
+        tmp.drawline(target, sf::Color::Blue);
     }
 }
