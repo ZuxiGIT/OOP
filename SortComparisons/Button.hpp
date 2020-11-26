@@ -2,9 +2,9 @@
 #define	Button_hpp
 #include "Vector.hpp"
 #include "Color.hpp"
+#include "CoordSys.hpp"
 
-
-typedef void (*fp)();
+typedef double (*fp)(double);
 
 
 class Button
@@ -15,14 +15,20 @@ class Button
 		sf::Text text;
 		sf::Font font;
 
+		CoordSys* coordSys; 
+
 		bool state;
 		fp function;
 	public:
 
-		Button 					(	Vector sz, Vector pos, sf::Color backgr_color = sf::Color::White, 
-									sf::Color txt_color = sf::Color::Black, const char* txt = "Some text",
-									fp func_pointer = NULL);
+		Button 					(	Vector sz, Vector pos, CoordSys* cs,
+									Color backgr_color 	= Color::White, 
+									Color txt_color 	= Color::Black, 
+									const char* txt 	= "Some text",
+									fp func_pointer 	= NULL);
 
+		void reverseColor		();
+		void action 			();
 		virtual void clicked	(Vector mouse_pos);
 		virtual void ScaleText	();
 		virtual void draw 		(sf::RenderTarget& target);
@@ -36,8 +42,10 @@ class EllipseButton : public Button
 	protected:
 		int quality = 70;
 	public:
-		EllipseButton			(	Vector pos, int a, int b, sf::Color backgr_color = sf::Color::White,
-									sf::Color txt_color = sf::Color::Black, const char* txt = "Some text",
+		EllipseButton			(	Vector pos, int a, int b, CoordSys* cs,
+									Color backgr_color 	= Color::White,
+									Color txt_color 	= Color::Black, 
+									const char* txt 	= "Some text",
 									fp func_pointer 	= NULL);
 
 		virtual void clicked	(Vector mouse_pos) 			override;
@@ -49,12 +57,12 @@ class CircleButton : public EllipseButton
 {
 	int radius;
 	public:
-		CircleButton	(	Vector pos, int r, sf::Color backgr_color = sf::Color::White,
-							sf::Color txt_color = sf::Color::Black, const char* txt = "Some text",
-							fp func_pointer = NULL);
+		CircleButton	(	Vector pos, int r, CoordSys* cs,
+							Color backgr_color 	= Color::White,
+							Color txt_color 	= Color::Black, 
+							const char* txt 	= "Some text",
+							fp func_pointer 	= NULL);
 };
-
-
 
 
 class ButtonHandler

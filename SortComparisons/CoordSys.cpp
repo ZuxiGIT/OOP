@@ -1,13 +1,22 @@
 #include "CoordSys.hpp"
 
-CoordSys::CoordSys(Vector sz, Vector pos, size_t st)
+CoordSys::CoordSys(Vector pos, Vector sz, size_t st)
 {
 	position   = pos;
 	size       = sz;
     step = st;
 }
 
+void CoordSys::setRanges(Vector Xrng, Vector Yrng)
+{
+    Xrange = Xrng;
+    Yrange = Yrng;
+}
 
+Vector CoordSys::getXrange()
+{
+    return Xrange;
+}
 void CoordSys::draw(sf::RenderTarget& target) const
 {
     //border
@@ -16,15 +25,6 @@ void CoordSys::draw(sf::RenderTarget& target) const
     border.setOutlineThickness(2);
     border.setOutlineColor(sf::Color::White);
     target.draw(border);
-
-    //axes
-    Vector Xaxe (size.X, 0);
-    Xaxe.startfrom(position.X, position.Y + size.Y);
-    Xaxe.draw(target);
-
-    Vector Yaxe (0, -size.Y);
-    Yaxe.startfrom(position.X, position.Y + size.Y);
-    Yaxe.draw(target);
 
     //grid
     Vector tmp (size.X, 0);
@@ -41,4 +41,13 @@ void CoordSys::draw(sf::RenderTarget& target) const
         tmp.startfrom(position.X  + (step * size.X - size.X * i) / step, position.Y);
         tmp.drawline(target, sf::Color::Blue);
     }
+
+    //axes
+    Vector Xaxe (size.X, 0);
+    Xaxe.startfrom(position.X, position.Y + size.Y / 2);
+    Xaxe.draw(target);
+
+    Vector Yaxe (0, -size.Y);
+    Yaxe.startfrom(position.X + size.X / 2, position.Y + size.Y);
+    Yaxe.draw(target);
 }

@@ -5,12 +5,12 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 800), "My window");
     
+    CoordSys cs (Vector(100, 100), Vector(500, 500));
+    cs.setRanges(Vector(-5, 5), Vector(-5, 5));
 
-    Button         but      (Vector(150,40) , Vector(10,10) , sf::Color::White, sf::Color::Black, "Sin");
-    EllipseButton  ellbut   (Vector(600,100), 30, 40        , sf::Color::White, sf::Color::Black, "Cos");
-    CircleButton   crclbut  (Vector(600,600), 30            , sf::Color::White, sf::Color::Black, "Tan");       
-
-    CoordSys cs (Vector(100, 100), Vector(100, 100));
+    Button         but      (Vector(150,40) , Vector(10,10) , &cs, Color::Cyan, Color::Black,    "Sin");
+    EllipseButton  ellbut   (Vector(600,100), 30, 40        , &cs, Color::Yellow, Color::Black,  "Cos");
+    CircleButton   crclbut  (Vector(600,600), 30            , &cs, Color::White, Color::Black,   "Tan");       
 
     ButtonHandler bthndl;
 
@@ -18,8 +18,8 @@ int main()
     bthndl.add(&ellbut);
     bthndl.add(&crclbut);
 
-
-
+    cs.draw(window);
+    
     while (window.isOpen())
     {   
 
@@ -41,12 +41,9 @@ int main()
                 
         }
 
-        window.clear(sf::Color::Black);
-
+        //window.clear(sf::Color::Black);
 
         bthndl.draw(window);
-        cs.draw(window);
-
         window.display();
     }
 

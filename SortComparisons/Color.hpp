@@ -11,15 +11,18 @@ struct Color
 	unsigned char B;
 	unsigned char Alpha;
 
-	static const Color Black;       
-	static const Color White;       
-	static const Color Red;         
-	static const Color Green;       
-	static const Color Blue;        
-	static const Color Yellow;      
-	static const Color Magenta;     
-	static const Color Cyan;        
-	static const Color Transparent; 
+
+	Color operator+(const Color&);
+	Color operator-(const Color&);
+
+	static const Color Black;
+	static const Color White;
+	static const Color Red;
+	static const Color Green;
+	static const Color Blue;
+	static const Color Yellow;
+	static const Color Magenta;
+	static const Color Cyan;
 
 	Color(unsigned char r = 255, unsigned char g = 255, unsigned char b = 255, unsigned char alpha = 255);
 };

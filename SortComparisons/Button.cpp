@@ -1,15 +1,20 @@
 #include "Button.hpp"
 #include <math.h>
 
-Button::Button(Vector sz, Vector pos, sf::Color backgr_color, sf::Color txt_color, const char* txt, fp func_pointer)
-: size(sz), position(pos), background_color(backgr_color), text_color(txt_color), state(false)
-{
+Button::Button(	Vector sz, Vector pos, CoordSys* cs,
+				Color backgr_color,
+				Color txt_color,
+				const char* txt,
+				fp func_pointer)
+
+: size(sz), position(pos), background_color(backgr_color), text_color(txt_color), coordSys(cs), state(false)
+{	
 	font = sf::Font();
 	font.loadFromFile("UbuntuMono-R.ttf");
 
 	text = sf::Text(txt, font);
 	text.setCharacterSize(20);
-	text.setFillColor(text_color);
+	text.setFillColor(sf::Color(text_color.R, text_color.G, text_color.B));
 	text.setStyle(sf::Text::Bold);// | sf::Text::Underlined);
 
 	ScaleText();
@@ -17,17 +22,31 @@ Button::Button(Vector sz, Vector pos, sf::Color backgr_color, sf::Color txt_colo
 	function = func_pointer;
 }
 
+void Button::action()
+{
+	sf::VertexArray points(sf::Points, 100);
+
+	Vector Xrange = coordSys -> getXrange();
+
+
+	//for (int i = 0; i < 100; i ++)
+		//points[i].position = sf::Vector()
+}
+
+void Button::reverseColor()
+{
+	text_color			= Color(255, 255, 255) - text_color;
+	background_color	= Color(255, 255, 255) - background_color;
+}
+
 void Button::clicked(Vector mouse_pos)
 {
 	if ((mouse_pos.X > position.X) && (mouse_pos.X < (position.X + size.X)) && 
 		(mouse_pos.Y > position.Y) && (mouse_pos.Y < (position.Y + size. Y)))
 	{
-		if(!state)
-			action();
+		action();
 		state = !state;
-		text_color			= Color(255 - text_color.R,			255 - text_color.G , 		255 - text_color.B);
-		background_color	= Color(255 - background_color.R,	255 - background_color.G, 	255 - background_color.B);
-
+		reverseColor();
 
 		text.setFillColor(sf::Color(text_color.R, text_color.G, text_color.B));
 	}
@@ -35,10 +54,10 @@ void Button::clicked(Vector mouse_pos)
 
 void Button::ScaleText()
 {
-	unsigned int glyph_height 	= text.GetCharacterSize();
-	unsigned int glyph_width 	= text.GetCharacterSize() / 2;
+	unsigned int glyph_height 	= text.getCharacterSize();
+	unsigned int glyph_width 	= text.getCharacterSize() / 2;
 
-	const char* str 			= text.GetString().toAnsiString().c_str();
+	const char* str 			= text.getString().toAnsiString().c_str();
 	size_t num_of_glyphs 		= 0;
 	
 	while(*str++)	num_of_glyphs++; 
@@ -74,7 +93,7 @@ void Button::draw (sf::RenderTarget& target)
 	
 	sf::RectangleShape Body(sf::Vector2f(size.X, size.Y));
 	Body.setPosition(position.X, position.Y);
-	Body.setFillColor(background_color);
+	Body.setFillColor(sf::Color(background_color.R, background_color.G, background_color.B));
 	Body.setOutlineThickness(2);
 	Body.setOutlineColor(sf::Color::Red);
 
@@ -84,11 +103,13 @@ void Button::draw (sf::RenderTarget& target)
 
 
 //------------------------------------ELLIPSE-------------------------------------------
-EllipseButton::EllipseButton(	Vector pos, int a, int b, sf::Color backgr_color,
-								sf::Color txt_color, const char* txt,
-								fp func_pointer) 
+EllipseButton::EllipseButton(	Vector pos, int a, int b, CoordSys* cs,
+								Color backgr_color,
+								Color txt_color,
+								const char* txt,
+								fp func_pointer)
 :	
-	Button(Vector(2*a, 2*b), Vector(pos.X, pos.Y), backgr_color, txt_color, txt, func_pointer),
+	Button(Vector(2*a, 2*b), Vector(pos.X, pos.Y), cs, backgr_color, txt_color, txt, func_pointer),
 	radius_a(a), 
 	radius_b(b)
 {
@@ -101,7 +122,7 @@ void EllipseButton::draw (sf::RenderTarget& target)
 
 	sf::ConvexShape ellipse;
 	ellipse.setPosition(position.X, position.Y);
-	ellipse.setFillColor(background_color);
+	ellipse.setFillColor(sf::Color(background_color.R, background_color.G, background_color.B));
 	ellipse.setOutlineThickness(2);
 	ellipse.setOutlineColor(sf::Color::Red);
 	ellipse.setPointCount(quality);
@@ -120,10 +141,10 @@ void EllipseButton::draw (sf::RenderTarget& target)
 
 void EllipseButton::ScaleText()
 {
-	unsigned int glyph_height 	= text.GetCharacterSize();
-	unsigned int glyph_width 	= text.GetCharacterSize() / 2;
+	unsigned int glyph_height 	= text.getCharacterSize();
+	unsigned int glyph_width 	= text.getCharacterSize() / 2;
 
-	const char* str 			= text.GetString().toAnsiString().c_str();
+	const char* str 			= text.getString().toAnsiString().c_str();
 	size_t num_of_glyphs 		= 0;
 	
 	while(*str++)	num_of_glyphs++; 
@@ -131,7 +152,7 @@ void EllipseButton::ScaleText()
 	//printf("EllipseButton: height is %u and width is %u and num of glyphs : %zu\n", glyph_height, glyph_width, num_of_glyphs);
 	//fflush(NULL);
 
-	double y = text.GetCharacterSize() / 2;
+	double y = text.getCharacterSize() / 2;
 	double x = sqrt(1 -  y * y / radius_b / radius_b ) * radius_a;
 
 	double right_height = 2 * y;
@@ -171,10 +192,9 @@ void EllipseButton::clicked(Vector mouse_pos)
 
 	if (X * X / (a * a) + Y * Y / (b * b) <= 1)
 	{
+		action();
 		state = !state;
-		text_color			= Color(255 - text_color.R,			255 - text_color.G , 		255 - text_color.B);
-		background_color	= Color(255 - background_color.R,	255 - background_color.G, 	255 - background_color.B);
-
+		reverseColor();
 
 		text.setFillColor(sf::Color(text_color.R, text_color.G, text_color.B));
 	}
@@ -183,11 +203,13 @@ void EllipseButton::clicked(Vector mouse_pos)
 
 
 //-------------------------------CIRCLE---------------------------------------
-CircleButton::CircleButton(	Vector pos, int r, sf::Color backgr_color,
-							sf::Color txt_color, const char* txt,
+CircleButton::CircleButton(	Vector pos, int r, CoordSys* cs,
+							Color backgr_color,
+							Color txt_color,
+							const char* txt,
 							fp func_pointer)
 :
-EllipseButton(pos, r, r, backgr_color, txt_color, txt, func_pointer),
+EllipseButton(pos, r, r, cs, backgr_color, txt_color, txt, func_pointer),
 radius(r)
 {}
 
