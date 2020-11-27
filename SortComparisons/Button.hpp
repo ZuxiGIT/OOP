@@ -6,7 +6,6 @@
 
 typedef double (*fp)(double);
 
-
 class Button
 {
 	protected:
@@ -63,7 +62,6 @@ class CircleButton : public EllipseButton
 							const char* txt 	= "Some text",
 							fp func_pointer 	= NULL);
 };
-
 
 class ButtonHandler
 {

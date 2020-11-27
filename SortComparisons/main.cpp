@@ -5,12 +5,13 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 800), "My window");
     
-    CoordSys cs (Vector(100, 100), Vector(500, 500));
+    CoordSys cs (&window, Vector(100, 100), Vector(500, 500));
     cs.setRanges(Vector(-5, 5), Vector(-5, 5));
 
-    Button         but      (Vector(150,40) , Vector(10,10) , &cs, Color::Cyan, Color::Black,    "Sin");
-    EllipseButton  ellbut   (Vector(600,100), 30, 40        , &cs, Color::Yellow, Color::Black,  "Cos");
-    CircleButton   crclbut  (Vector(600,600), 30            , &cs, Color::White, Color::Black,   "Tan");       
+    Button         but      (Vector(150,40) , Vector(10,10) , &cs, Color::Cyan, Color::Black,    "Sin", sin);
+    EllipseButton  ellbut   (Vector(600,100), 30, 40        , &cs, Color::Yellow, Color::Black,  "Cos", cos);
+    CircleButton   crclbut  (Vector(600,600), 30            , &cs, Color::White, Color::Black,   "Tan", tan);       
+    //CrossedButton  crsbut   ()
 
     ButtonHandler bthndl;
 

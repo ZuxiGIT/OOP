@@ -24,13 +24,24 @@ Button::Button(	Vector sz, Vector pos, CoordSys* cs,
 
 void Button::action()
 {
-	sf::VertexArray points(sf::Points, 100);
+	if(state) return;
+	printf("ACTION\n");
+	fflush(NULL);
+	sf::VertexArray points(sf::Points, 1e4);
 
 	Vector Xrange = coordSys -> getXrange();
 
 
-	//for (int i = 0; i < 100; i ++)
-		//points[i].position = sf::Vector()
+	for (int i = 0; i < 1e4; i ++)
+	{
+		double x = Xrange.X + (Xrange.Y - Xrange.X) / 1e4 * i;
+		double y = function(x);
+		printf("X = %lf Y = %lf\n", x, y);
+		points[i].position 	= sf::Vector2f(x, y);
+		points[i].color 	= sf::Color::Black;
+	}
+
+	coordSys -> drawPoints(points);
 }
 
 void Button::reverseColor()

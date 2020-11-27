@@ -1,10 +1,27 @@
 #include "CoordSys.hpp"
 
-CoordSys::CoordSys(Vector pos, Vector sz, size_t st)
+
+Vector CoordSys::scalePoint (double x, double y)
+{
+    double X_ = size.X / (Xrange.Y - Xrange.X) * x
+                + position.X + size.X / 2;
+    
+
+    double Y_ = size.Y / (Yrange.Y - Yrange.X) * y
+                + position.Y + size.Y / 2;
+
+    return Vector(X_, Y_);
+}
+
+
+
+
+CoordSys::CoordSys(sf::RenderWindow* target, Vector pos, Vector sz, size_t st)
+: win(target)
 {
 	position   = pos;
 	size       = sz;
-    step = st;
+    step       = st;
 }
 
 void CoordSys::setRanges(Vector Xrng, Vector Yrng)
@@ -50,4 +67,17 @@ void CoordSys::draw(sf::RenderTarget& target) const
     Vector Yaxe (0, -size.Y);
     Yaxe.startfrom(position.X + size.X / 2, position.Y + size.Y);
     Yaxe.draw(target);
+}
+
+void CoordSys::drawPoints(sf::VertexArray arr)
+{
+    printf("%zu number of points\n",arr.getVertexCount() );
+    for(size_t i = 0; i < arr.getVertexCount(); i++)
+    {
+        Vector scaledPoint = scalePoint(arr[i].position.x, arr[i].position.y);
+        arr[i].position.x = scaledPoint.X; 
+        arr[i].position.y = scaledPoint.Y;
+    }
+
+    win->draw(arr);
 }
