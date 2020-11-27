@@ -34,6 +34,14 @@ Vector CoordSys::getXrange()
 {
     return Xrange;
 }
+
+
+sf::RenderTarget& CoordSys::getWindow()
+{
+    return *win;
+}
+
+
 void CoordSys::draw(sf::RenderTarget& target) const
 {
     //border

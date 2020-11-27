@@ -3,34 +3,47 @@
 #include "Vector.hpp"
 #include "Color.hpp"
 #include "CoordSys.hpp"
+#include "math.h"
 
 typedef double (*fp)(double);
 
-class Button
+
+class AbstractButton
 {
 	protected:
 		Vector size, position;
+		CoordSys* coordSys;
+
+	public:
+		AbstractButton( Vector pos, Vector sz, CoordSys* cs);
+		virtual void action 	() = 0;
+		virtual void clicked	(Vector mouse_pos) = 0;
+		virtual void draw		(sf::RenderTarget& target) = 0;
+
+};
+
+class Button : public AbstractButton
+{
+	protected:
 		Color background_color, text_color;
 		sf::Text text;
 		sf::Font font;
-
-		CoordSys* coordSys; 
 
 		bool state;
 		fp function;
 	public:
 
-		Button 					(	Vector sz, Vector pos, CoordSys* cs,
+		Button 					(	Vector pos, Vector sz, CoordSys* cs,
 									Color backgr_color 	= Color::White, 
 									Color txt_color 	= Color::Black, 
 									const char* txt 	= "Some text",
 									fp func_pointer 	= NULL);
 
 		void reverseColor		();
-		void action 			();
-		virtual void clicked	(Vector mouse_pos);
+		virtual void action 	() override;
+		virtual void clicked	(Vector mouse_pos) override;
 		virtual void ScaleText	();
-		virtual void draw 		(sf::RenderTarget& target);
+		virtual void draw 		(sf::RenderTarget& target) override;
 
 };
 
@@ -52,6 +65,7 @@ class EllipseButton : public Button
 		virtual void draw 		(sf::RenderTarget& target) 	override;
 
 };
+
 class CircleButton : public EllipseButton
 {
 	int radius;
@@ -63,17 +77,27 @@ class CircleButton : public EllipseButton
 							fp func_pointer 	= NULL);
 };
 
+class CrossedButton : public AbstractButton
+{
+	public:
+		CrossedButton(Vector pos, Vector sz, CoordSys* cs);
+		virtual void action		()	override;
+		virtual void clicked 	(Vector mouse_pos) override;
+		virtual void draw 		(sf::RenderTarget& target) override;
+};
+
+
 class ButtonHandler
 {
 	static const int NUMBER_OF_BUTTONS = 30;
-	Button* buttons[NUMBER_OF_BUTTONS] = {};
+	AbstractButton* buttons[NUMBER_OF_BUTTONS] = {};
 	size_t count = 0;
 
 	public:
 		ButtonHandler	();
 
 		void draw 		(sf::RenderTarget& target);
-		void add 		(Button* but);
+		void add 		(AbstractButton* but);
 		void clicked	(Vector mouse_pos);
 };
 #endif /* Button_hpp */

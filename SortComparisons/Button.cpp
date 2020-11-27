@@ -1,13 +1,19 @@
 #include "Button.hpp"
 #include <math.h>
 
-Button::Button(	Vector sz, Vector pos, CoordSys* cs,
+ 
+AbstractButton::AbstractButton(Vector pos, Vector sz, CoordSys* cs)
+: size(sz), position(pos), coordSys(cs)
+{}
+
+
+Button::Button(	Vector pos, Vector sz, CoordSys* cs,
 				Color backgr_color,
 				Color txt_color,
 				const char* txt,
 				fp func_pointer)
 
-: size(sz), position(pos), background_color(backgr_color), text_color(txt_color), coordSys(cs), state(false)
+: AbstractButton(pos, sz, cs), background_color(backgr_color), text_color(txt_color), state(false)
 {	
 	font = sf::Font();
 	font.loadFromFile("UbuntuMono-R.ttf");
@@ -25,8 +31,10 @@ Button::Button(	Vector sz, Vector pos, CoordSys* cs,
 void Button::action()
 {
 	if(state) return;
+
 	printf("ACTION\n");
 	fflush(NULL);
+
 	sf::VertexArray points(sf::Points, 1e4);
 
 	Vector Xrange = coordSys -> getXrange();
@@ -36,8 +44,8 @@ void Button::action()
 	{
 		double x = Xrange.X + (Xrange.Y - Xrange.X) / 1e4 * i;
 		double y = function(x);
-		printf("X = %lf Y = %lf\n", x, y);
-		points[i].position 	= sf::Vector2f(x, y);
+
+		points[i].position 	= sf::Vector2f(x, -y);
 		points[i].color 	= sf::Color::Black;
 	}
 
@@ -120,7 +128,7 @@ EllipseButton::EllipseButton(	Vector pos, int a, int b, CoordSys* cs,
 								const char* txt,
 								fp func_pointer)
 :	
-	Button(Vector(2*a, 2*b), Vector(pos.X, pos.Y), cs, backgr_color, txt_color, txt, func_pointer),
+	Button(Vector(pos.X, pos.Y), Vector(2*a, 2*b), cs, backgr_color, txt_color, txt, func_pointer),
 	radius_a(a), 
 	radius_b(b)
 {
@@ -224,6 +232,47 @@ EllipseButton(pos, r, r, cs, backgr_color, txt_color, txt, func_pointer),
 radius(r)
 {}
 
+
+//-----------------------------CrossedButton-----------------------------------
+
+CrossedButton::CrossedButton(Vector pos, Vector sz, CoordSys* cs)
+: AbstractButton(pos, sz, cs)
+{}
+
+void CrossedButton::action()
+{
+	printf("LCICKED\n");
+	coordSys -> draw(coordSys -> getWindow());
+}
+
+void CrossedButton::clicked(Vector mouse_pos)
+{
+	if (mouse_pos.X == (position.X + size.X / 2) &&
+		mouse_pos.Y == (position.Y + size.Y / 2))
+		action();
+}
+
+
+void CrossedButton::draw(sf::RenderTarget& target)
+{
+	double len = size.length();
+
+	double degree = 180 / M_PI;
+	
+	sf::RectangleShape line(sf::Vector2f(len, 2));
+	line.setFillColor(sf::Color::Red);
+
+	//printf("angle is %lf\n ", asin(size.Y / len) * degree);
+	line.rotate(asin(size.Y / len) * degree);
+	line.setPosition(position.X, position.Y);
+	target.draw(line);
+
+	line.rotate(180 - 2 * asin(size.Y / len) * degree);
+ 	line.setPosition(position.X + size.X, position.Y);
+	target.draw(line);
+}
+
+
 //-----------------------------ButtonHandler-----------------------------------
 ButtonHandler::ButtonHandler()
 {}
@@ -240,7 +289,7 @@ void ButtonHandler::clicked(Vector mouse_pos)
 		buttons[i]->clicked(mouse_pos);  
 }
 
-void ButtonHandler::add(Button* but)
+void ButtonHandler::add(AbstractButton* but)
 {
 	if (count <= NUMBER_OF_BUTTONS - 1)
 		buttons[count++] = but;

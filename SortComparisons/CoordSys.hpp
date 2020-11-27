@@ -24,6 +24,7 @@ class CoordSys
         void setRanges(Vector Xrange, Vector Yrange);
         Vector getXrange();
 
+        sf::RenderTarget& getWindow();
         void draw 		(sf::RenderTarget& target) const;
         void drawPoints	(sf::VertexArray arr);
 };
