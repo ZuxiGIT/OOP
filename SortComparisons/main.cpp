@@ -8,18 +8,24 @@ int main()
     CoordSys cs (&window, Vector(100, 100), Vector(500, 500));
     cs.setRanges(Vector(-5, 5), Vector(-5, 5));
 
-    Button         but      (Vector(10,10)  , Vector(150,40), &cs, Color::Cyan,   Color::Black, "Sin", sin);
-    EllipseButton  ellbut   (Vector(600,100), 30, 40        , &cs, Color::Yellow, Color::Black, "Cos", cos);
-    CircleButton   crclbut  (Vector(600,600), 30            , &cs, Color::Green,  Color::Black, "Tan", tan);       
-    CrossedButton  crsbut   (Vector(700,700), Vector(100,100),&cs);
+
+    // Button         but      (Vector(10,10)  , Vector(150,40), &cs, Color::Cyan,   Color::Black, "Sin", sin);
+    // EllipseButton  ellbut   (Vector(600,100), 30, 40        , &cs, Color::Yellow, Color::Black, "Cos", cos);
+    // CircleButton   crclbut  (Vector(600,600), 30            , &cs, Color::Green,  Color::Black, "Tan", tan);       
+    // CrossedButton  crsbut   (Vector(700,700), Vector(100,100),&cs);
 
     ButtonHandler bthndl;
 
-    bthndl.add(&but);
-    bthndl.add(&ellbut);
-    bthndl.add(&crclbut);
-    bthndl.add(&crsbut);
+    // bthndl.add(&but);
+    // bthndl.add(&ellbut);
+    // bthndl.add(&crclbut);
+    // bthndl.add(&crsbut);
 
+    bthndl.add(new Button       (Vector(10,10)  , Vector(150,40), &cs, Color::Cyan,   Color::Black, "Sin", sin));
+    bthndl.add(new EllipseButton(Vector(600,100), 30, 40        , &cs, Color::Yellow, Color::Black, "Cos", cos));
+    bthndl.add(new CircleButton (Vector(600,600), 30            , &cs, Color::Green,  Color::Black, "Tan", tan));       
+    bthndl.add(new CrossedButton(Vector(700,700), Vector(100,100),&cs));
+    
     cs.draw(window);
     
     while (window.isOpen())

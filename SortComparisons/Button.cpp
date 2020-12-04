@@ -6,6 +6,8 @@ AbstractButton::AbstractButton(Vector pos, Vector sz, CoordSys* cs)
 : size(sz), position(pos), coordSys(cs)
 {}
 
+AbstractButton::~AbstractButton()
+{}
 
 Button::Button(	Vector pos, Vector sz, CoordSys* cs,
 				Color backgr_color,
@@ -27,6 +29,9 @@ Button::Button(	Vector pos, Vector sz, CoordSys* cs,
 
 	function = func_pointer;
 }
+
+Button::~Button()
+{}
 
 void Button::action()
 {
@@ -135,6 +140,8 @@ EllipseButton::EllipseButton(	Vector pos, int a, int b, CoordSys* cs,
 	ScaleText();
 }
 
+EllipseButton::~EllipseButton()
+{}
 
 void EllipseButton::draw (sf::RenderTarget& target)
 {
@@ -180,7 +187,7 @@ void EllipseButton::ScaleText()
 	//printf("EllipseButton: RIGHT SIZE IS (width %lf; height %lf)\n", right_width, right_height);
 
 	double Xscale =  (right_width - 4) 	/ (num_of_glyphs * glyph_width);
-	double Yscale =	 right_height 			/ (glyph_height);
+	double Yscale =	 right_height 		/ (glyph_height);
 
 	Xscale = Xscale > 1 ? 1 : Xscale; 
 	Yscale = Yscale > 1 ? 1 : Yscale;
@@ -239,6 +246,10 @@ CrossedButton::CrossedButton(Vector pos, Vector sz, CoordSys* cs)
 : AbstractButton(pos, sz, cs)
 {}
 
+CrossedButton::~CrossedButton()
+{}
+
+
 void CrossedButton::action()
 {
 	printf("LCICKED\n");
@@ -296,4 +307,10 @@ void ButtonHandler::add(AbstractButton* but)
 	else
 		{printf("ERROR: ButtonManager is full\n"); fflush(NULL);}
 
+}
+
+ButtonHandler::~ButtonHandler()
+{
+	for (size_t i = 0; i < count; i ++)
+		delete buttons[i];
 }

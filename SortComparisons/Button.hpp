@@ -15,7 +15,10 @@ class AbstractButton
 		CoordSys* coordSys;
 
 	public:
+		
 		AbstractButton( Vector pos, Vector sz, CoordSys* cs);
+		virtual ~AbstractButton() = 0;
+		
 		virtual void action 	() = 0;
 		virtual void clicked	(Vector mouse_pos) = 0;
 		virtual void draw		(sf::RenderTarget& target) = 0;
@@ -39,6 +42,8 @@ class Button : public AbstractButton
 									const char* txt 	= "Some text",
 									fp func_pointer 	= NULL);
 
+		virtual ~Button 		() override;
+		
 		void reverseColor		();
 		virtual void action 	() override;
 		virtual void clicked	(Vector mouse_pos) override;
@@ -54,12 +59,14 @@ class EllipseButton : public Button
 	protected:
 		int quality = 70;
 	public:
+		
 		EllipseButton			(	Vector pos, int a, int b, CoordSys* cs,
 									Color backgr_color 	= Color::White,
 									Color txt_color 	= Color::Black, 
 									const char* txt 	= "Some text",
 									fp func_pointer 	= NULL);
-
+		virtual ~EllipseButton 	() override;
+		
 		virtual void clicked	(Vector mouse_pos) 			override;
 		virtual void ScaleText	()				   			override; 
 		virtual void draw 		(sf::RenderTarget& target) 	override;
@@ -80,8 +87,12 @@ class CircleButton : public EllipseButton
 class CrossedButton : public AbstractButton
 {
 	public:
+		
 		CrossedButton(Vector pos, Vector sz, CoordSys* cs);
-		virtual void action		()	override;
+
+		virtual ~CrossedButton 	() override;
+		
+		virtual void action		() override;
 		virtual void clicked 	(Vector mouse_pos) override;
 		virtual void draw 		(sf::RenderTarget& target) override;
 };
@@ -94,8 +105,10 @@ class ButtonHandler
 	size_t count = 0;
 
 	public:
+		
 		ButtonHandler	();
-
+		~ButtonHandler	();
+		
 		void draw 		(sf::RenderTarget& target);
 		void add 		(AbstractButton* but);
 		void clicked	(Vector mouse_pos);
