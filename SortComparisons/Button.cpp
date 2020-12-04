@@ -1,22 +1,35 @@
 #include "Button.hpp"
 #include <math.h>
 
- 
-AbstractButton::AbstractButton(Vector pos, Vector sz, CoordSys* cs)
-: size(sz), position(pos), coordSys(cs)
+//---------------------------AbstarctButton------------------------------
+AbstractButton::AbstractButton(Vector pos, Vector sz)
+: size(sz), position(pos)
 {}
 
 AbstractButton::~AbstractButton()
 {}
 
-Button::Button(	Vector pos, Vector sz, CoordSys* cs,
-				Color backgr_color,
-				Color txt_color,
-				const char* txt,
-				fp func_pointer)
+//------------------------------------CoordSysActionButton---------------------------
 
-: AbstractButton(pos, sz, cs), background_color(backgr_color), text_color(txt_color), state(false)
-{	
+
+CoordSysActionButton::CoordSysActionButton(Vector pos, Vector sz, CoordSys* cs)
+: AbstractButton(pos, sz), coordSys(cs)
+{}
+
+CoordSysActionButton::~CoordSysActionButton()
+{}
+
+//------------------------------------MathButton-------------------------
+
+MathButton::MathButton( Vector pos, Vector sz, CoordSys* cs,
+						Color backgr_color,
+						Color txt_color, 
+						const char* txt, 
+						fp func_pointer)
+
+:CoordSysActionButton(pos, sz, cs), background_color(backgr_color), text_color(txt_color),
+function(func_pointer), state(false)
+{
 	font = sf::Font();
 	font.loadFromFile("UbuntuMono-R.ttf");
 
@@ -24,10 +37,40 @@ Button::Button(	Vector pos, Vector sz, CoordSys* cs,
 	text.setCharacterSize(20);
 	text.setFillColor(sf::Color(text_color.R, text_color.G, text_color.B));
 	text.setStyle(sf::Text::Bold);// | sf::Text::Underlined);
+}
 
+MathButton::~MathButton()
+{}
+
+void MathButton::reverseColor()
+{
+	text_color			= Color(255, 255, 255) - text_color;
+	background_color	= Color(255, 255, 255) - background_color;
+}
+
+void MathButton::drawShadow(sf::RenderTarget& target)
+{
+	sf::Vector2f pos 	= text.getPosition();
+	sf::Color clr	= text.getFillColor();
+	text.setPosition(pos.x + 1,  pos.y + 1);
+	text.setFillColor(sf::Color::Black);
+	
+	target.draw(text);
+
+	text.setFillColor(clr);
+	text.setPosition(pos);
+}
+
+//------------------------------------Button----------------------------------
+Button::Button(	Vector pos, Vector sz, CoordSys* cs,
+				Color backgr_color,
+				Color txt_color,
+				const char* txt,
+				fp func_pointer)
+
+: MathButton(pos, sz, cs, backgr_color, txt_color, txt, func_pointer)
+{	
 	ScaleText();
-
-	function = func_pointer;
 }
 
 Button::~Button()
@@ -55,12 +98,6 @@ void Button::action()
 	}
 
 	coordSys -> drawPoints(points);
-}
-
-void Button::reverseColor()
-{
-	text_color			= Color(255, 255, 255) - text_color;
-	background_color	= Color(255, 255, 255) - background_color;
 }
 
 void Button::clicked(Vector mouse_pos)
@@ -122,6 +159,9 @@ void Button::draw (sf::RenderTarget& target)
 	Body.setOutlineColor(sf::Color::Red);
 
 	target.draw(Body);
+
+	drawShadow(target);
+	
 	target.draw(text);
 }
 
@@ -162,6 +202,9 @@ void EllipseButton::draw (sf::RenderTarget& target)
 	    ellipse.setPoint(i, sf::Vector2f(x,y));
 	}
 	target.draw(ellipse);
+
+	drawShadow(target);
+
 	target.draw(text);
 }
 
@@ -243,7 +286,7 @@ radius(r)
 //-----------------------------CrossedButton-----------------------------------
 
 CrossedButton::CrossedButton(Vector pos, Vector sz, CoordSys* cs)
-: AbstractButton(pos, sz, cs)
+: CoordSysActionButton(pos, sz, cs)
 {}
 
 CrossedButton::~CrossedButton()
@@ -258,8 +301,9 @@ void CrossedButton::action()
 
 void CrossedButton::clicked(Vector mouse_pos)
 {
-	if (mouse_pos.X == (position.X + size.X / 2) &&
-		mouse_pos.Y == (position.Y + size.Y / 2))
+	double X = mouse_pos.X - position.X - size.X / 2;
+	double Y = mouse_pos.Y - position.Y - size.Y / 2;
+	if (X * X + Y * Y <= 25)
 		action();
 }
 
@@ -300,7 +344,7 @@ void ButtonHandler::clicked(Vector mouse_pos)
 		buttons[i]->clicked(mouse_pos);  
 }
 
-void ButtonHandler::add(AbstractButton* but)
+void ButtonHandler::add(CoordSysActionButton* but)
 {
 	if (count <= NUMBER_OF_BUTTONS - 1)
 		buttons[count++] = but;

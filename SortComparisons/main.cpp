@@ -21,10 +21,10 @@ int main()
     // bthndl.add(&crclbut);
     // bthndl.add(&crsbut);
 
-    bthndl.add(new Button       (Vector(10,10)  , Vector(150,40), &cs, Color::Cyan,   Color::Black, "Sin", sin));
-    bthndl.add(new EllipseButton(Vector(600,100), 30, 40        , &cs, Color::Yellow, Color::Black, "Cos", cos));
-    bthndl.add(new CircleButton (Vector(600,600), 30            , &cs, Color::Green,  Color::Black, "Tan", tan));       
-    bthndl.add(new CrossedButton(Vector(700,700), Vector(100,100),&cs));
+    bthndl.add(new Button       (Vector(10,10)  , Vector(150,40) , &cs, Color::Cyan,   Color::Black, "Sin", sin));
+    bthndl.add(new EllipseButton(Vector(600,100), 30, 40         , &cs, Color::Yellow, Color::Black, "Cos", cos));
+    bthndl.add(new CircleButton (Vector(600,600), 30             , &cs, Color::Green,  Color::Black, "Tan", tan));       
+    bthndl.add(new CrossedButton(Vector(700,700), Vector(100,100), &cs));
     
     cs.draw(window);
     

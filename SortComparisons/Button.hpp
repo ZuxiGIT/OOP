@@ -12,28 +12,55 @@ class AbstractButton
 {
 	protected:
 		Vector size, position;
-		CoordSys* coordSys;
 
 	public:
 		
-		AbstractButton( Vector pos, Vector sz, CoordSys* cs);
-		virtual ~AbstractButton() = 0;
+		AbstractButton( Vector pos, Vector sz);
+		virtual ~AbstractButton () = 0;
+
 		
-		virtual void action 	() = 0;
 		virtual void clicked	(Vector mouse_pos) = 0;
 		virtual void draw		(sf::RenderTarget& target) = 0;
 
 };
 
-class Button : public AbstractButton
+class CoordSysActionButton : public AbstractButton
 {
 	protected:
+		CoordSys* coordSys;
+	public:
+		virtual void action() = 0; 
+		CoordSysActionButton(Vector pos, Vector sz, CoordSys* cs);
+		~CoordSysActionButton();
+};
+
+class MathButton : public CoordSysActionButton
+{
+	protected:
+		
 		Color background_color, text_color;
 		sf::Text text;
 		sf::Font font;
-
-		bool state;
+		
+		
 		fp function;
+		bool state;
+
+
+	public:
+		MathButton( Vector pos, Vector sz, CoordSys* cs,
+							Color backgr_color  = Color::White,
+							Color txt_color 	= Color::Black, 
+							const char* txt 	= "Some text", 
+							fp func_pointer 	= NULL);
+		~MathButton();
+
+		void reverseColor	();
+		void drawShadow		(sf::RenderTarget& target);
+};
+
+class Button : public MathButton
+{
 	public:
 
 		Button 					(	Vector pos, Vector sz, CoordSys* cs,
@@ -44,7 +71,6 @@ class Button : public AbstractButton
 
 		virtual ~Button 		() override;
 		
-		void reverseColor		();
 		virtual void action 	() override;
 		virtual void clicked	(Vector mouse_pos) override;
 		virtual void ScaleText	();
@@ -84,7 +110,7 @@ class CircleButton : public EllipseButton
 							fp func_pointer 	= NULL);
 };
 
-class CrossedButton : public AbstractButton
+class CrossedButton : public CoordSysActionButton
 {
 	public:
 		
@@ -101,7 +127,7 @@ class CrossedButton : public AbstractButton
 class ButtonHandler
 {
 	static const int NUMBER_OF_BUTTONS = 30;
-	AbstractButton* buttons[NUMBER_OF_BUTTONS] = {};
+	CoordSysActionButton* buttons[NUMBER_OF_BUTTONS] = {};
 	size_t count = 0;
 
 	public:
@@ -110,7 +136,7 @@ class ButtonHandler
 		~ButtonHandler	();
 		
 		void draw 		(sf::RenderTarget& target);
-		void add 		(AbstractButton* but);
+		void add 		(CoordSysActionButton* but);
 		void clicked	(Vector mouse_pos);
 };
 #endif /* Button_hpp */
