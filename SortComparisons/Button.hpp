@@ -1,40 +1,23 @@
 #ifndef Button_hpp
 #define	Button_hpp
-#include "Vector.hpp"
-#include "Color.hpp"
+#include "extern.hpp"
 #include "CoordSys.hpp"
-#include "math.h"
+#include "Color.hpp"
 
 typedef double (*fp)(double);
 
+//????????????????????????????????????????????????????????????????????
 
-class AbstractButton
-{
-	protected:
-		Vector size, position;
-
-	public:
-		
-		AbstractButton( Vector pos, Vector sz);
-		virtual ~AbstractButton () = 0;
-
-		
-		virtual void clicked	(Vector mouse_pos) = 0;
-		virtual void draw		(sf::RenderTarget& target) = 0;
-
-};
-
-class CoordSysActionButton : public AbstractButton
+class CoordSysButton : public ActionButton
 {
 	protected:
 		CoordSys* coordSys;
-	public:
-		virtual void action() = 0; 
-		CoordSysActionButton(Vector pos, Vector sz, CoordSys* cs);
-		~CoordSysActionButton();
+	public: 
+		CoordSysButton(Vector pos, Vector sz, CoordSys* cs);
+		~CoordSysButton();
 };
 
-class MathButton : public CoordSysActionButton
+class MathButton : public CoordSysButton
 {
 	protected:
 		
@@ -110,7 +93,7 @@ class CircleButton : public EllipseButton
 							fp func_pointer 	= NULL);
 };
 
-class CrossedButton : public CoordSysActionButton
+class CrossedButton : public CoordSysButton
 {
 	public:
 		
@@ -124,19 +107,6 @@ class CrossedButton : public CoordSysActionButton
 };
 
 
-class ButtonHandler
-{
-	static const int NUMBER_OF_BUTTONS = 30;
-	CoordSysActionButton* buttons[NUMBER_OF_BUTTONS] = {};
-	size_t count = 0;
 
-	public:
-		
-		ButtonHandler	();
-		~ButtonHandler	();
-		
-		void draw 		(sf::RenderTarget& target);
-		void add 		(CoordSysActionButton* but);
-		void clicked	(Vector mouse_pos);
-};
+
 #endif /* Button_hpp */

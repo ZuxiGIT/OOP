@@ -2,7 +2,7 @@
 #define Vector_hpp
 #include <SFML/Graphics.hpp>
 #include <math.h>
-//#include "Line.hpp"
+
 
 class Vector
 {

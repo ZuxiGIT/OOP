@@ -36,27 +36,27 @@ Vector CoordSys::getXrange()
 }
 
 
-sf::RenderTarget& CoordSys::getWindow()
+sf::RenderWindow& CoordSys::getWindow()
 {
     return *win;
 }
 
 
-void CoordSys::draw(sf::RenderTarget& target) const
+void CoordSys::draw() const
 {
     //border
     sf::RectangleShape border(sf::Vector2f(size.X, size.Y));
     border.setPosition(position.X, position.Y);
     border.setOutlineThickness(2);
     border.setOutlineColor(sf::Color::White);
-    target.draw(border);
+    win->draw(border);
 
     //grid
     Vector tmp (size.X, 0);
     for ( size_t i = 1; i <= step; i ++)
     {
         tmp.startfrom(position.X, position.Y + (step * size.Y - size.Y * i) / step);
-        tmp.drawline(target, sf::Color::Blue);
+        tmp.drawline(*win, sf::Color::Blue);
     }
     
     tmp.X = 0;
@@ -64,17 +64,17 @@ void CoordSys::draw(sf::RenderTarget& target) const
     for ( size_t i = 1; i <= step; i ++)
     {
         tmp.startfrom(position.X  + (step * size.X - size.X * i) / step, position.Y);
-        tmp.drawline(target, sf::Color::Blue);
+        tmp.drawline(*win, sf::Color::Blue);
     }
 
     //axes
     Vector Xaxe (size.X, 0);
     Xaxe.startfrom(position.X, position.Y + size.Y / 2);
-    Xaxe.draw(target);
+    Xaxe.draw(*win);
 
     Vector Yaxe (0, -size.Y);
     Yaxe.startfrom(position.X + size.X / 2, position.Y + size.Y);
-    Yaxe.draw(target);
+    Yaxe.draw(*win);
 }
 
 void CoordSys::drawPoints(sf::VertexArray arr)

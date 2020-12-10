@@ -1,4 +1,5 @@
 #include "Button.hpp"
+#include "extern.hpp"
 #include <math.h>
 
 //---------------------------AbstarctButton------------------------------
@@ -9,14 +10,24 @@ AbstractButton::AbstractButton(Vector pos, Vector sz)
 AbstractButton::~AbstractButton()
 {}
 
-//------------------------------------CoordSysActionButton---------------------------
-
-
-CoordSysActionButton::CoordSysActionButton(Vector pos, Vector sz, CoordSys* cs)
-: AbstractButton(pos, sz), coordSys(cs)
+//------------------------------------ActionButton-----------------------------------
+ActionButton::ActionButton(Vector pos, Vector sz)
+:AbstractButton(pos, sz)
 {}
 
-CoordSysActionButton::~CoordSysActionButton()
+ActionButton::~ActionButton()
+{}
+
+void ActionButton::action()
+{}
+//------------------------------------CoordSysButton---------------------------
+
+
+CoordSysButton::CoordSysButton(Vector pos, Vector sz, CoordSys* cs)
+: ActionButton(pos, sz), coordSys(cs)
+{}
+
+CoordSysButton::~CoordSysButton()
 {}
 
 //------------------------------------MathButton-------------------------
@@ -27,7 +38,7 @@ MathButton::MathButton( Vector pos, Vector sz, CoordSys* cs,
 						const char* txt, 
 						fp func_pointer)
 
-:CoordSysActionButton(pos, sz, cs), background_color(backgr_color), text_color(txt_color),
+:CoordSysButton(pos, sz, cs), background_color(backgr_color), text_color(txt_color),
 function(func_pointer), state(false)
 {
 	font = sf::Font();
@@ -286,7 +297,7 @@ radius(r)
 //-----------------------------CrossedButton-----------------------------------
 
 CrossedButton::CrossedButton(Vector pos, Vector sz, CoordSys* cs)
-: CoordSysActionButton(pos, sz, cs)
+: CoordSysButton(pos, sz, cs)
 {}
 
 CrossedButton::~CrossedButton()
@@ -295,8 +306,8 @@ CrossedButton::~CrossedButton()
 
 void CrossedButton::action()
 {
-	printf("LCICKED\n");
-	coordSys -> draw(coordSys -> getWindow());
+	printf("CLICKED\n");
+	coordSys -> draw();			//coordSys -> draw(coordSys -> getWindow());
 }
 
 void CrossedButton::clicked(Vector mouse_pos)
@@ -344,7 +355,7 @@ void ButtonHandler::clicked(Vector mouse_pos)
 		buttons[i]->clicked(mouse_pos);  
 }
 
-void ButtonHandler::add(CoordSysActionButton* but)
+void ButtonHandler::add(ActionButton* but)
 {
 	if (count <= NUMBER_OF_BUTTONS - 1)
 		buttons[count++] = but;
