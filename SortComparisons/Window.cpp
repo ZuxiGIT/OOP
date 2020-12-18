@@ -76,7 +76,7 @@ void WindowHandler::closeWindow()
 			for (size_t j = i; j < count - 1; j++)
 				windows[j] = windows[j + 1];
 
-			windows[count - 1] = nullptr;
+			windows[count - 1] = NULL;
 			count--;
 
 			break;

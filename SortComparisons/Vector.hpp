@@ -1,7 +1,7 @@
 #ifndef Vector_hpp
 #define Vector_hpp
-#include <SFML/Graphics.hpp>
 #include <math.h>
+#include <SFML/Graphics.hpp>
 
 
 class Vector

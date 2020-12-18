@@ -1,9 +1,11 @@
-#include "Button.hpp"
+#define SFML_STATIC
 #define SFML_DEFINE_DISCRETE_GPU_PREFERENCE
+#include "Button.hpp"
 
 int main()
 {
     WindowHandler winhndl;
+    printf("WINDOWS SUCKS!");
 
 
 //-------------------1 window-----------------------
