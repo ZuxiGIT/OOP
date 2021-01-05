@@ -1,0 +1,32 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: g++.exe build active file",
+			"command": "C:\\MinGW\\bin\\g++.exe",
+			"args": [
+				"${workspaceFolder}\\*.cpp",
+				"-o", "${fileDirname}\\${fileBasenameNoExtension}.exe",
+				//"-IC:/Program Files (x86)/SFML/include",
+				//"-I${workspaceFolder}",
+				//"-LC:/Program Files (x86)/SFML/lib",
+				"-LC:/MinGW/lib/SFML",
+				"-lsfml-graphics", "-lsfml-window", "-lsfml-audio",  "-lsfml-system",
+				"-g"
+				
+			],
+			"options": {
+				"cwd": "C:\\MinGW\\bin"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "compiler: C:\\MinGW\\bin\\g++.exe"
+		}
+	]
+}
