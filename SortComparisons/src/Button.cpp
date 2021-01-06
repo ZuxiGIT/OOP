@@ -42,7 +42,7 @@ MathButton::MathButton( Vector pos, Vector sz, CoordSys* cs,
 function(func_pointer), state(false)
 {
 	font = sf::Font();
-	font.loadFromFile("UbuntuMono-R.ttf");
+	font.loadFromFile("TrueTypeFonts/UbuntuMono-R.ttf");
 
 	text = sf::Text(txt, font);
 	text.setCharacterSize(20);
