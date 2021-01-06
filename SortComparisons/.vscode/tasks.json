@@ -6,8 +6,10 @@
 			"label": "C/C++: g++.exe build active file",
 			"command": "C:\\MinGW\\bin\\g++.exe",
 			"args": [
-				"${workspaceFolder}\\*.cpp",
+				"${workspaceFolder}\\src\\*.cpp",
 				"-o", "${fileDirname}\\${fileBasenameNoExtension}.exe",
+				"-IC:/Users/mikhail/Desktop/GIT/C++/OOP/SortComparisons/include",
+				"-LC:/Users/mikhail/Desktop/GIT/C++/OOP/SortComparisons/src",
 				//"-IC:/Program Files (x86)/SFML/include",
 				//"-I${workspaceFolder}",
 				//"-LC:/Program Files (x86)/SFML/lib",
