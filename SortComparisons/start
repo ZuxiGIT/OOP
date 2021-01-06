@@ -1,1 +1,0 @@
-g++ $1 Vector.cpp Button.cpp CoordSys.cpp Color.cpp Window.cpp -lsfml-system -lsfml-audio -lsfml-window -lsfml-graphics -lm -Wall

@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 #define SFML_STATIC
 #define SFML_DEFINE_DISCRETE_GPU_PREFERENCE
-=======
-#define SFML_DEFINE_DISCRETE_GPU_PREFERENCE
 
->>>>>>> cf7f627 (cahnged main.cpp)
 #include "Button.hpp"
 
-int ffff()
+int main()
 {
     WindowHandler winhndl;
     printf("WINDOWS SUCKS!");
@@ -85,13 +81,10 @@ int ffff()
         //window.clear(sf::Color::Black);
 
         //bthndl.draw(window);
-<<<<<<< HEAD
         //window.setTitle("vvvvvvvvvvvvvvvvv");
         //window.display();
         winhndl.display();
-=======
-        window.display();
->>>>>>> cf7f627 (cahnged main.cpp)
+
     }
 
     return 0;
