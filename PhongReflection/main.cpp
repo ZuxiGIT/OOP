@@ -17,8 +17,8 @@ int main()
     Light ThirdLight (Vector(300, -300, 400), Color(0, 0, 255, 254));
     Light FourthLight(Vector(-300, 300, 400), Color(128, 255, 128, 255));
     sph.lights.push_back(SecondLight);
-    sph.lights.push_back(ThirdLight);
-    sph.lights.push_back(FourthLight);
+    //sph.lights.push_back(ThirdLight);
+    //sph.lights.push_back(FourthLight);
     
     while (window.isOpen())
     {   

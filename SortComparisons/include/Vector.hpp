@@ -55,8 +55,9 @@ struct DrawableVector :  Vector2
 	void 	drawline	(sf::RenderTarget& target, sf::Color Color = sf::Color::White);
 	void   	draw 		(sf::RenderTarget& target);
 
-	void 	check		(const DrawableVector& obj) const { if(!((startX == obj.startX) && (startY == obj.startY))) 
-												   		error("DrawableVector::check(): differnt start points");  } 
+	void 	check		(const DrawableVector& obj) const 
+	{ if(!((startX == obj.startX) && (startY == obj.startY))) 
+		error("DrawableVector::check(): differnt start points"); } 
 };
 
 DrawableVector  operator*	(const DrawableVector& obj, double num);

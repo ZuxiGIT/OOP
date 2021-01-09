@@ -13,9 +13,6 @@ Vector2 CoordSys::scalePoint (double x, double y)
     return Vector2(X_, Y_);
 }
 
-
-
-
 CoordSys::CoordSys(sf::RenderWindow* target, Vector2 pos, Vector2 sz, size_t st)
 : position(pos), size(sz), Xrange(0), Yrange(0), win(target)
 {
@@ -35,12 +32,10 @@ Vector2 CoordSys::getXrange()
     return Xrange;
 }
 
-
 sf::RenderWindow& CoordSys::getWindow()
 {
     return *win;
 }
-
 
 void CoordSys::draw() const
 {
@@ -75,6 +70,8 @@ void CoordSys::draw() const
     DrawableVector Yaxe (0, -size.Y);
     Yaxe.startfrom(position.X + size.X / 2, position.Y + size.Y);
     Yaxe.draw(*win);
+
+    win->draw(field);
 }
 
 void CoordSys::drawPoints(sf::VertexArray arr)
@@ -85,7 +82,6 @@ void CoordSys::drawPoints(sf::VertexArray arr)
         Vector2 scaledPoint = scalePoint(arr[i].position.x, arr[i].position.y);
         arr[i].position.x = scaledPoint.X; 
         arr[i].position.y = scaledPoint.Y;
+        field.append(arr[i]);
     }
-
-    win->draw(arr);
 }

@@ -32,7 +32,7 @@ inline double 	operator^	(const Vector2& left, const Vector2& right)
 }
 inline Vector2 	operator+(const Vector2& left, const Vector2& right)
 {
-	std::cout <<" ++ \n";
+	//std::cout <<" ++ \n";
 	return Vector2(left.X + right.X, left.Y + right.Y);
 }
 Vector2& Vector2::operator+=(const Vector2& obj)

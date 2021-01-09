@@ -1,13 +1,12 @@
 #include "Window.hpp"
-
+//#include <iostream>
 //---------------------------------------------Window---------------------------------
 Window::Window()
 :sf::RenderWindow(sf::VideoMode(30, 30), "ERROR!")
 {}
 
 Window::Window(Vector2 size, const char* title, unsigned int bpp)
-: sf::RenderWindow(sf::VideoMode(size.X, size.Y, bpp), title)
-{}
+: sf::RenderWindow(sf::VideoMode(size.X, size.Y, bpp), title) {}
 
 Window::~Window()
 {}
@@ -54,18 +53,62 @@ void WindowHandler::add(Window* win)
 
 } 
 
-void WindowHandler::clicked(Vector2 mouse_pos)
+void WindowHandler::clicked(const sf::Event& event)
 {
-	for (size_t i = 0; i < count; i ++)
-		if((*windows[i]).hasFocus())
-		{ 
-			(*windows[i]).getBtnMngr().clicked(mouse_pos);
-			break;
-		}
+	if ( (event.type == sf::Event::MouseButtonPressed) ||
+		 (event.type == sf::Event::MouseButtonReleased))
+		if(event.mouseButton.button == sf::Mouse::Left)
+			for (size_t i = 0; i < count; i ++)
+				if((*windows[i]).hasFocus())
+				{ 
+					(*windows[i]).getBtnMngr().clicked(Vector2(event.mouseButton.x, event.mouseButton.y));
+					break;
+				}
 }
 
-void WindowHandler::closeWindow()
+void WindowHandler::pressed (const sf::Event& event)
+{
+	if (event.type == sf::Event::KeyPressed)
+        if (event.key.code == sf::Keyboard::LAlt)
+        {
+            closeWindow(true);
+			return;
+        }
+		else if (event.key.code == sf::Keyboard::Escape)
+		{
+			//std::cout <<"escape\n";
+			closeWindow();
+			return;
+		} 
+    if (event.type == sf::Event::Closed)
+        {
+			//std::cout <<"closing...\n";
+			closeWindow();
+			return;
+		}
+		
+	return;
+}
+
+void WindowHandler::clear(Color col)
+{
+	for (size_t i = 0; i < count; i ++)
+		(*windows[i]).clear(col);
+
+}
+void WindowHandler::closeWindow(bool all)
 {	
+	if (all)
+	{
+		for (size_t i = 0; i < count; i ++)
+		{
+			printf("Closing window %zu\n", i);
+			(*windows[i]).close();
+			delete windows[i];
+		}
+		return;
+	}
+	
 	for (size_t i = 0; i < count; i ++)
 		if((*windows[i]).hasFocus())
 		{ 
@@ -73,14 +116,17 @@ void WindowHandler::closeWindow()
 			(*windows[i]).close();
 			delete windows[i];
 			
+			
 			for (size_t j = i; j < count - 1; j++)
+				//std::cout << "moving "<<j<< "window\n";
 				windows[j] = windows[j + 1];
-
+			
 			windows[count - 1] = NULL;
 			count--;
-
 			break;
 		}
+
+	return;
 }
 
 void WindowHandler::display()
@@ -92,7 +138,6 @@ void WindowHandler::display()
 	}
 
 }
-
 
 //????????????????????????????????????????????????????????????????????????????????????????????????????????
 

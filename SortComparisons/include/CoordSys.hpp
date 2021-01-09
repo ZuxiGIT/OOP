@@ -7,6 +7,8 @@ class CoordSys
 	Vector2 size, position;
 	size_t step;
 
+	sf::VertexArray field;
+
 	Vector2 Xrange, Yrange;
 
 	sf::RenderWindow* win;
@@ -26,6 +28,7 @@ class CoordSys
         sf::RenderWindow&   getWindow   ();
         void draw 		    () const;
         void drawPoints	    (sf::VertexArray arr);
+		void clean() 		{ field = sf::VertexArray(sf::Points);}
 };
 
 #endif

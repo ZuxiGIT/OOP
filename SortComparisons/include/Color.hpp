@@ -2,9 +2,6 @@
 #define Color_hpp
 
 #include "SFML/Graphics/Color.hpp"
-#include "error.h"
-
-typedef sf::Color SFMLColor;
 
 struct Color
 {
@@ -24,12 +21,13 @@ struct Color
 
 	Color(unsigned char r = 255, unsigned char g = 255, unsigned char b = 255, unsigned char alpha = 255)
 	{ R = r; G = g; B = b; Alpha = alpha;}
+	Color(sf::Color col) {R = col.r; G = col.g; B = col.b; Alpha = col.a;}
 
 	~Color() {}
 
-	Color operator +(const Color& obj) { return Color((R + obj.R  ) % 255, (G + obj.G  ) % 255, (B + obj.B  ) % 255); }
-	Color operator -(const Color& obj) { return Color(R - obj.R  , G - obj.G  , B - obj.B); }
-	Color operator ~() 				   { return Color(255 - R, 255 - G, 255 - B); }
+	Color operator+ (const Color& obj) { return Color((R + obj.R  ) % 255, (G + obj.G  ) % 255, (B + obj.B  ) % 255); }
+	Color operator- (const Color& obj) { return Color(R - obj.R  , G - obj.G  , B - obj.B); }
+	Color operator~ () 				   { return Color(255 - R, 255 - G, 255 - B); }
 
 	operator sf::Color() {return sf::Color(R, G, B, Alpha);}
 };

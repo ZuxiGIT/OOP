@@ -13,7 +13,6 @@ MathButton::MathButton( Vector2 pos, Vector2 sz, CoordSys* cs,
 						Color txt_color, 
 						const char* txt, 
 						fp func_pointer)
-
 :CoordSysButton(pos, sz, cs), background_color(backgr_color), text_color(txt_color),
 function(func_pointer), state(false)
 {
@@ -51,7 +50,6 @@ Button::Button(	Vector2 pos, Vector2 sz, CoordSys* cs,
 				Color txt_color,
 				const char* txt,
 				fp func_pointer)
-
 : MathButton(pos, sz, cs, backgr_color, txt_color, txt, func_pointer)
 {	
 	ScaleText();
@@ -282,7 +280,7 @@ CrossedButton::~CrossedButton()
 void CrossedButton::action()
 {
 	printf("CLICKED\n");
-	coordSys -> draw();			//coordSys -> draw(coordSys -> getWindow());
+	coordSys -> clean();			//coordSys -> draw(coordSys -> getWindow());
 }
 
 void CrossedButton::clicked(Vector2 mouse_pos)
