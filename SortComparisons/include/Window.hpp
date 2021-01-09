@@ -8,7 +8,7 @@ class Window : public sf::RenderWindow
 	ButtonHandler* btn_manager = NULL;
 	public:
 		Window();
-		Window(Vector size, const char* title, unsigned int bits_per_pixel = 32);
+		Window(Vector2 size, const char* title, unsigned int bits_per_pixel = 32);
 		~Window();
 
 		void connectButtonManager(ButtonHandler* btnhndl);
@@ -27,7 +27,7 @@ class WindowHandler
 		~WindowHandler();
 
 		void 	add			(Window* obj);	
-		void 	clicked		(Vector mouse_pos);
+		void 	clicked		(Vector2 mouse_pos);
 		void 	closeWindow	();
 		void 	display		();
 		

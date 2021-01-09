@@ -1,38 +1,14 @@
 #include "Button.hpp"
 #include "extern.hpp"
+#include <iostream>
 #include <math.h>
 
 //---------------------------AbstarctButton------------------------------
-AbstractButton::AbstractButton(Vector pos, Vector sz)
-: size(sz), position(pos)
-{}
-
-AbstractButton::~AbstractButton()
-{}
-
-//------------------------------------ActionButton-----------------------------------
-ActionButton::ActionButton(Vector pos, Vector sz)
-:AbstractButton(pos, sz)
-{}
-
-ActionButton::~ActionButton()
-{}
-
-void ActionButton::action()
-{}
-//------------------------------------CoordSysButton---------------------------
-
-
-CoordSysButton::CoordSysButton(Vector pos, Vector sz, CoordSys* cs)
-: ActionButton(pos, sz), coordSys(cs)
-{}
-
-CoordSysButton::~CoordSysButton()
-{}
-
+//------------------------------------ActionButton-----------------------
+//------------------------------------CoordSysButton---------------------
 //------------------------------------MathButton-------------------------
 
-MathButton::MathButton( Vector pos, Vector sz, CoordSys* cs,
+MathButton::MathButton( Vector2 pos, Vector2 sz, CoordSys* cs,
 						Color backgr_color,
 						Color txt_color, 
 						const char* txt, 
@@ -50,19 +26,16 @@ function(func_pointer), state(false)
 	text.setStyle(sf::Text::Bold);// | sf::Text::Underlined);
 }
 
-MathButton::~MathButton()
-{}
-
 void MathButton::reverseColor()
 {
-	text_color			= Color(255, 255, 255) - text_color;
-	background_color	= Color(255, 255, 255) - background_color;
+	text_color			= ~text_color;
+	background_color	= ~background_color;
 }
 
 void MathButton::drawShadow(sf::RenderTarget& target)
 {
 	sf::Vector2f pos 	= text.getPosition();
-	sf::Color clr	= text.getFillColor();
+	sf::Color clr		= text.getFillColor();
 	text.setPosition(pos.x + 1,  pos.y + 1);
 	text.setFillColor(sf::Color::Black);
 	
@@ -73,7 +46,7 @@ void MathButton::drawShadow(sf::RenderTarget& target)
 }
 
 //------------------------------------Button----------------------------------
-Button::Button(	Vector pos, Vector sz, CoordSys* cs,
+Button::Button(	Vector2 pos, Vector2 sz, CoordSys* cs,
 				Color backgr_color,
 				Color txt_color,
 				const char* txt,
@@ -96,7 +69,7 @@ void Button::action()
 
 	sf::VertexArray points(sf::Points, 1e4);
 
-	Vector Xrange = coordSys -> getXrange();
+	Vector2 Xrange = coordSys -> getXrange();
 
 
 	for (int i = 0; i < 1e4; i ++)
@@ -111,7 +84,7 @@ void Button::action()
 	coordSys -> drawPoints(points);
 }
 
-void Button::clicked(Vector mouse_pos)
+void Button::clicked(Vector2 mouse_pos)
 {
 	if ((mouse_pos.X > position.X) && (mouse_pos.X < (position.X + size.X)) && 
 		(mouse_pos.Y > position.Y) && (mouse_pos.Y < (position.Y + size. Y)))
@@ -120,7 +93,7 @@ void Button::clicked(Vector mouse_pos)
 		state = !state;
 		reverseColor();
 
-		text.setFillColor(sf::Color(text_color.R, text_color.G, text_color.B));
+		text.setFillColor(text_color);
 	}
 }
 
@@ -165,7 +138,7 @@ void Button::draw (sf::RenderTarget& target)
 	
 	sf::RectangleShape Body(sf::Vector2f(size.X, size.Y));
 	Body.setPosition(position.X, position.Y);
-	Body.setFillColor(sf::Color(background_color.R, background_color.G, background_color.B));
+	Body.setFillColor(background_color);
 	Body.setOutlineThickness(2);
 	Body.setOutlineColor(sf::Color::Red);
 
@@ -178,13 +151,13 @@ void Button::draw (sf::RenderTarget& target)
 
 
 //------------------------------------ELLIPSE-------------------------------------------
-EllipseButton::EllipseButton(	Vector pos, int a, int b, CoordSys* cs,
+EllipseButton::EllipseButton(	Vector2 pos, int a, int b, CoordSys* cs,
 								Color backgr_color,
 								Color txt_color,
 								const char* txt,
 								fp func_pointer)
 :	
-	Button(Vector(pos.X, pos.Y), Vector(2*a, 2*b), cs, backgr_color, txt_color, txt, func_pointer),
+	Button(Vector2(pos.X, pos.Y), Vector2(2*a, 2*b), cs, backgr_color, txt_color, txt, func_pointer),
 	radius_a(a), 
 	radius_b(b)
 {
@@ -199,7 +172,7 @@ void EllipseButton::draw (sf::RenderTarget& target)
 
 	sf::ConvexShape ellipse;
 	ellipse.setPosition(position.X, position.Y);
-	ellipse.setFillColor(sf::Color(background_color.R, background_color.G, background_color.B));
+	ellipse.setFillColor(background_color);
 	ellipse.setOutlineThickness(2);
 	ellipse.setOutlineColor(sf::Color::Red);
 	ellipse.setPointCount(quality);
@@ -263,27 +236,29 @@ void EllipseButton::ScaleText()
 	text.setScale(Xscale, Yscale);
 }
 
-void EllipseButton::clicked(Vector mouse_pos)
+void EllipseButton::clicked(Vector2 mouse_pos)
 {	
 	int X = mouse_pos.X - position.X;
 	int Y = mouse_pos.Y - position.Y;
-	int a = radius_a;
-	int b = radius_b;
+	double a = radius_a;
+	double b = radius_b;
 
 	if (X * X / (a * a) + Y * Y / (b * b) <= 1)
 	{
+		std::cout << "Mouse position: " << X<<", "<< Y<<std::endl;
+		std::cout << "Formula is "<< X*X <<"/"<< a*a<<"+"<<Y*Y<<"/"<<b*b<<"="<< X * X / (a * a) + Y * Y / (b * b)<<std::endl;
 		action();
 		state = !state;
 		reverseColor();
 
-		text.setFillColor(sf::Color(text_color.R, text_color.G, text_color.B));
+		text.setFillColor(text_color);
 	}
 }
 
 
 
 //-------------------------------CIRCLE---------------------------------------
-CircleButton::CircleButton(	Vector pos, int r, CoordSys* cs,
+CircleButton::CircleButton(	Vector2 pos, int r, CoordSys* cs,
 							Color backgr_color,
 							Color txt_color,
 							const char* txt,
@@ -296,7 +271,7 @@ radius(r)
 
 //-----------------------------CrossedButton-----------------------------------
 
-CrossedButton::CrossedButton(Vector pos, Vector sz, CoordSys* cs)
+CrossedButton::CrossedButton(Vector2 pos, Vector2 sz, CoordSys* cs)
 : CoordSysButton(pos, sz, cs)
 {}
 
@@ -310,7 +285,7 @@ void CrossedButton::action()
 	coordSys -> draw();			//coordSys -> draw(coordSys -> getWindow());
 }
 
-void CrossedButton::clicked(Vector mouse_pos)
+void CrossedButton::clicked(Vector2 mouse_pos)
 {
 	double X = mouse_pos.X - position.X - size.X / 2;
 	double Y = mouse_pos.Y - position.Y - size.Y / 2;
@@ -349,7 +324,7 @@ void ButtonHandler::draw (sf::RenderTarget& target)
 		buttons[i]->draw(target);  
 }
 
-void ButtonHandler::clicked(Vector mouse_pos)
+void ButtonHandler::clicked(Vector2 mouse_pos)
 {
 	for (size_t i = 0; i < count; i ++)
 		buttons[i]->clicked(mouse_pos);  

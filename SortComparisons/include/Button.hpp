@@ -6,15 +6,14 @@
 
 typedef double (*fp)(double);
 
-//????????????????????????????????????????????????????????????????????
-
 class CoordSysButton : public ActionButton
 {
 	protected:
 		CoordSys* coordSys;
 	public: 
-		CoordSysButton(Vector pos, Vector sz, CoordSys* cs);
-		~CoordSysButton();
+		CoordSysButton(Vector2 pos, Vector2 sz, CoordSys* cs) : ActionButton(pos, sz),
+															  coordSys(cs) {}
+		~CoordSysButton() {}
 };
 
 class MathButton : public CoordSysButton
@@ -31,12 +30,12 @@ class MathButton : public CoordSysButton
 
 
 	public:
-		MathButton( Vector pos, Vector sz, CoordSys* cs,
+		MathButton( Vector2 pos, Vector2 sz, CoordSys* cs,
 							Color backgr_color  = Color::White,
 							Color txt_color 	= Color::Black, 
 							const char* txt 	= "Some text", 
 							fp func_pointer 	= NULL);
-		~MathButton();
+		~MathButton() {}
 
 		void reverseColor	();
 		void drawShadow		(sf::RenderTarget& target);
@@ -46,7 +45,7 @@ class Button : public MathButton
 {
 	public:
 
-		Button 					(	Vector pos, Vector sz, CoordSys* cs,
+		Button 					(	Vector2 pos, Vector2 sz, CoordSys* cs,
 									Color backgr_color 	= Color::White, 
 									Color txt_color 	= Color::Black, 
 									const char* txt 	= "Some text",
@@ -55,7 +54,7 @@ class Button : public MathButton
 		virtual ~Button 		() override;
 		
 		virtual void action 	() override;
-		virtual void clicked	(Vector mouse_pos) override;
+		virtual void clicked	(Vector2 mouse_pos) override;
 		virtual void ScaleText	();
 		virtual void draw 		(sf::RenderTarget& target) override;
 
@@ -69,14 +68,14 @@ class EllipseButton : public Button
 		int quality = 70;
 	public:
 		
-		EllipseButton			(	Vector pos, int a, int b, CoordSys* cs,
+		EllipseButton			(	Vector2 pos, int a, int b, CoordSys* cs,
 									Color backgr_color 	= Color::White,
 									Color txt_color 	= Color::Black, 
 									const char* txt 	= "Some text",
 									fp func_pointer 	= NULL);
 		virtual ~EllipseButton 	() override;
 		
-		virtual void clicked	(Vector mouse_pos) 			override;
+		virtual void clicked	(Vector2 mouse_pos) 			override;
 		virtual void ScaleText	()				   			override; 
 		virtual void draw 		(sf::RenderTarget& target) 	override;
 
@@ -86,7 +85,7 @@ class CircleButton : public EllipseButton
 {
 	int radius;
 	public:
-		CircleButton	(	Vector pos, int r, CoordSys* cs,
+		CircleButton	(	Vector2 pos, int r, CoordSys* cs,
 							Color backgr_color 	= Color::White,
 							Color txt_color 	= Color::Black, 
 							const char* txt 	= "Some text",
@@ -97,12 +96,12 @@ class CrossedButton : public CoordSysButton
 {
 	public:
 		
-		CrossedButton(Vector pos, Vector sz, CoordSys* cs);
+		CrossedButton(Vector2 pos, Vector2 sz, CoordSys* cs);
 
 		virtual ~CrossedButton 	() override;
 		
 		virtual void action		() override;
-		virtual void clicked 	(Vector mouse_pos) override;
+		virtual void clicked 	(Vector2 mouse_pos) override;
 		virtual void draw 		(sf::RenderTarget& target) override;
 };
 

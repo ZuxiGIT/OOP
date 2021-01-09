@@ -2,6 +2,7 @@
 #define SFML_DEFINE_DISCRETE_GPU_PREFERENCE
 
 #include "Button.hpp"
+#include <iostream>
 
 int main()
 {
@@ -10,18 +11,17 @@ int main()
 
 
 //-------------------1 window-----------------------
-    winhndl.add(new Window (Vector(800, 800), "My window"));
+    winhndl.add(new Window (Vector2(800, 800), "My window"));
     
-    //Window window(Vector(800, 800), "My window");
+    //Window window(Vector2(800, 800), "My window");
     
-    CoordSys cs (&winhndl[0], Vector(100, 100), Vector(500, 500));
-    cs.setRanges(Vector(-5, 5), Vector(-5, 5));
+    CoordSys cs (&winhndl[0], Vector2(100, 100), Vector2(500, 500));
+    cs.setRanges(Vector2(-5, 5), Vector2(-5, 5));
 
-
-    // Button         but      (Vector(10,10)  , Vector(150,40), &cs, Color::Cyan,   Color::Black, "Sin", sin);
-    // EllipseButton  ellbut   (Vector(600,100), 30, 40        , &cs, Color::Yellow, Color::Black, "Cos", cos);
-    // CircleButton   crclbut  (Vector(600,600), 30            , &cs, Color::Green,  Color::Black, "Tan", tan);       
-    // CrossedButton  crsbut   (Vector(700,700), Vector(100,100),&cs);
+    // Button         but      (Vector2(10,10)  , Vector2(150,40), &cs, Color::Cyan,   Color::Black, "Sin", sin);
+    // EllipseButton  ellbut   (Vector2(600,100), 30, 40        , &cs, Color::Yellow, Color::Black, "Cos", cos);
+    // CircleButton   crclbut  (Vector2(600,600), 30            , &cs, Color::Green,  Color::Black, "Tan", tan);       
+    // CrossedButton  crsbut   (Vector2(700,700), Vector2(100,100),&cs);
 
     ButtonHandler bthndl;
 
@@ -30,32 +30,32 @@ int main()
     // bthndl.add(&crclbut);
     // bthndl.add(&crsbut);
 
-    bthndl.add(new Button       (Vector(10,10)  , Vector(150,40) , &cs, Color::Cyan,   Color::Black, "Sin", sin));
-    bthndl.add(new EllipseButton(Vector(600,100), 30, 40         , &cs, Color::Yellow, Color::Black, "Cos", cos));
-    bthndl.add(new CircleButton (Vector(600,600), 30             , &cs, Color::Green,  Color::Black, "Tan", tan));       
-    bthndl.add(new CrossedButton(Vector(700,700), Vector(100,100), &cs));
+    bthndl.add(new Button       (Vector2(10,10)  , Vector2(150,40) , &cs, Color::Cyan,   Color::Black, "Sin", sin));
+    bthndl.add(new EllipseButton(Vector2(600,100), 30, 40         , &cs, Color::Yellow, Color::Black, "Cos", cos));
+    bthndl.add(new CircleButton (Vector2(600,600), 30             , &cs, Color::Green,  Color::Black, "Tan", tan));       
+    bthndl.add(new CrossedButton(Vector2(700,700), Vector2(100,100), &cs));
     
-    cs.draw();
+    
 
 	winhndl[0].connectButtonManager(&bthndl);
 
 //---------------2 window------------------------
+/*
+	winhndl.add(new Window (Vector2(800, 800), "My 2 window"));
 
-	winhndl.add(new Window (Vector(800, 800), "My 2 window"));
-
-	CoordSys cs2 (&winhndl[1], Vector(100, 100), Vector(500, 500));
-    cs2.setRanges(Vector(-5, 5), Vector(-5, 5));
+	CoordSys cs2 (&winhndl[1], Vector2(100, 100), Vector2(500, 500));
+    cs2.setRanges(Vector2(-5, 5), Vector2(-5, 5));
     cs2.draw();
 
     ButtonHandler bthndl2;
 
-    bthndl2.add(new Button       (Vector(10,10)  , Vector(150,40) , &cs2, Color::Cyan,   Color::Black, "Sinh", sinh));
-    bthndl2.add(new EllipseButton(Vector(600,100), 30, 40         , &cs2, Color::Yellow, Color::Black, "Cosh", cosh));
-    bthndl2.add(new CircleButton (Vector(600,600), 30             , &cs2, Color::Green,  Color::Black, "Tanh", tanh));       
-    bthndl2.add(new CrossedButton(Vector(700,700), Vector(100,100), &cs2));
+    bthndl2.add(new Button       (Vector2(10,10)  , Vector2(150,40) , &cs2, Color::Cyan,   Color::Black, "Sinh", sinh));
+    bthndl2.add(new EllipseButton(Vector2(600,100), 30, 40         , &cs2, Color::Yellow, Color::Black, "Cosh", cosh));
+    bthndl2.add(new CircleButton (Vector2(600,600), 30             , &cs2, Color::Green,  Color::Black, "Tanh", tanh));       
+    bthndl2.add(new CrossedButton(Vector2(700,700), Vector2(100,100), &cs2));
     
     winhndl[1].connectButtonManager(&bthndl2);
-
+*/
     while (winhndl.isAlive())
     {   
     	//window.setTitle("fffff");
@@ -72,10 +72,10 @@ int main()
             
             if (event.type == sf::Event::MouseButtonPressed &&
                 event.mouseButton.button == sf::Mouse::Left)
-                winhndl.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
+                winhndl.clicked(Vector2(event.mouseButton.x, event.mouseButton.y));
             if (event.type == sf::Event::MouseButtonReleased &&
                 event.mouseButton.button == sf::Mouse::Left)
-                winhndl.clicked(Vector(event.mouseButton.x, event.mouseButton.y));
+                winhndl.clicked(Vector2(event.mouseButton.x, event.mouseButton.y));
         }
         
         //window.clear(sf::Color::Black);
@@ -83,8 +83,9 @@ int main()
         //bthndl.draw(window);
         //window.setTitle("vvvvvvvvvvvvvvvvv");
         //window.display();
+        
+        cs.draw();
         winhndl.display();
-
     }
 
     return 0;

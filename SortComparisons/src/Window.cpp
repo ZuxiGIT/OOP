@@ -5,7 +5,7 @@ Window::Window()
 :sf::RenderWindow(sf::VideoMode(30, 30), "ERROR!")
 {}
 
-Window::Window(Vector size, const char* title, unsigned int bpp)
+Window::Window(Vector2 size, const char* title, unsigned int bpp)
 : sf::RenderWindow(sf::VideoMode(size.X, size.Y, bpp), title)
 {}
 
@@ -54,7 +54,7 @@ void WindowHandler::add(Window* win)
 
 } 
 
-void WindowHandler::clicked(Vector mouse_pos)
+void WindowHandler::clicked(Vector2 mouse_pos)
 {
 	for (size_t i = 0; i < count; i ++)
 		if((*windows[i]).hasFocus())
@@ -118,4 +118,6 @@ bool WindowHandler::getEvent(sf::Event& event)
 	for (size_t i = 0; i < count; i ++)
 		if((*windows[i]).hasFocus())
 			return (*windows[i]).pollEvent(event);
+
+	exit(1);
 }
