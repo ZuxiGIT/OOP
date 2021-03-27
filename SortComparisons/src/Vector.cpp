@@ -56,7 +56,7 @@ inline bool 	operator!=(const Vector2& left, const Vector2& right)
 {
 	return !( left == right);
 }
-double Vector2::length()
+double Vector2::length() const
 {
 	return sqrt(X * X + Y * Y);
 }

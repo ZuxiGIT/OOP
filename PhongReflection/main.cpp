@@ -13,7 +13,7 @@ int main()
     
     Vector add = Vector (-sph.lights[0].position.Z, 0, sph.lights[0].position.X);
     
-    Light SecondLight(Vector(300, 300, 400), Color(255, 0, 255, 255));
+    Light SecondLight(Vector(300, 300, 400), Color(255, 255, 0, 255));
     Light ThirdLight (Vector(300, -300, 400), Color(0, 0, 255, 254));
     Light FourthLight(Vector(-300, 300, 400), Color(128, 255, 128, 255));
     sph.lights.push_back(SecondLight);

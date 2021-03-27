@@ -149,11 +149,11 @@ void Button::draw (sf::RenderTarget& target)
 
 
 //------------------------------------ELLIPSE-------------------------------------------
-EllipseButton::EllipseButton(	Vector2 pos, int a, int b, CoordSys* cs,
-								Color backgr_color,
-								Color txt_color,
-								const char* txt,
-								fp func_pointer)
+EllipseButton::EllipseButton( Vector2 pos, int a, int b, CoordSys* cs,
+							  Color backgr_color,
+							  Color txt_color,
+							  const char* txt,
+							  fp func_pointer)
 :	
 	Button(Vector2(pos.X, pos.Y), Vector2(2*a, 2*b), cs, backgr_color, txt_color, txt, func_pointer),
 	radius_a(a), 

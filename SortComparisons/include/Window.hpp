@@ -2,6 +2,7 @@
 #define Window_hpp
 #include "extern.hpp"
 #include "Color.hpp"
+#include <stack>
 
 class Window : public sf::RenderWindow
 {
@@ -40,6 +41,21 @@ class WindowHandler
 		bool 	isAlive		();
 		bool 	getEvent	(sf::Event&);
 
+};
+
+
+
+class DrawableSpace
+{
+	sf::Sprite background {};
+	std::stack<const sf::Texture*> back_history{};
+	sf::RenderTexture foreground {};
+
+	void update() { back_history.push(background.getTexture()); background.setTexture(foreground.getTexture()); }
+	void undo();
+public:
+	DrawableSpace();
+	void draw(sf::RenderTarget& target);
 };
 
 #endif /* Window_hpp */

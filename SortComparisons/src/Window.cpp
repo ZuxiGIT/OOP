@@ -1,4 +1,5 @@
 #include "Window.hpp"
+#include "Color.hpp"
 //#include <iostream>
 //---------------------------------------------Window---------------------------------
 Window::Window()
@@ -146,7 +147,7 @@ Window& WindowHandler::operator[] (size_t index)
 	if (index < count)
 		return *windows[index];
 	else
-		{printf("ERROR: out of range of WindowHandler\n"); fflush(NULL); return *windows[count - 1];} // return value?
+		{fprintf(stderr, "ERROR: out of range of WindowHandler\n"); exit(1);} // return value?
 }
 
 bool WindowHandler::isAlive()
@@ -165,4 +166,33 @@ bool WindowHandler::getEvent(sf::Event& event)
 			return (*windows[i]).pollEvent(event);
 
 	exit(1);
+}
+
+
+
+//-----------------------------DrawableSpace----------
+DrawableSpace::DrawableSpace(int screen_width, int screen_height)
+{
+	background.setPosition(screen_width * 0.25, 0);
+	background.setColor(Color::Yellow);
+	foreground.setSmooth(true);
+}
+void DrawableSpace::undo()
+{
+	if( sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) &&
+		sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+		if(!back_history.empty())
+			{
+				background.setTexture(*back_history.top());
+				back_history.pop();
+			}
+}
+
+void DrawableSpace::draw(sf::RenderTarget& target)
+{
+	target.draw(background);
+
+	foreground.display();
+	sf::Sprite fore (foreground.getTexture());
+	target.draw(fore);
 }

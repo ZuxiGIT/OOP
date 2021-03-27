@@ -16,7 +16,7 @@ struct Vector2
 	Vector2& operator+= 	(const Vector2& obj);
 
 	void 	setSize			(double x, double y) { X = x; Y = y; }
-	double 	length			();
+	double 	length			() const;
 };
 Vector2 operator*	(const Vector2& obj, double num);
 Vector2 operator*	(double num, const Vector2& obj);

@@ -1,5 +1,4 @@
-#define SFML_STATIC
-#define SFML_DEFINE_DISCRETE_GPU_PREFERENCE
+//#define SFML_DEFINE_DISCRETE_GPU_PREFERENCE
 
 #include "Button.hpp"
 #include <iostream>
@@ -23,7 +22,7 @@ int main()
     bthndl.add(new Button       (Vector2(10,10)  , Vector2(150,40), &cs, Color::Cyan,   Color::Black, "Sin", sin));
     bthndl.add(new EllipseButton(Vector2(600,100), 30, 40         , &cs, Color::Yellow, Color::Black, "Cos", cos));
     bthndl.add(new CircleButton (Vector2(600,600), 30             , &cs, Color::Green,  Color::Black, "Tan", tan));       
-    bthndl.add(new CrossedButton(Vector2(700,700), Vector2(100,100), &cs));
+    bthndl.add(new CrossedButton(Vector2(700,700), Vector2(100,100),&cs));
     
     
 
